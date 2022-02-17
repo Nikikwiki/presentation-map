@@ -1,0 +1,36 @@
+.map {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.controls {
+    position: absolute;
+    z-index: 99999;
+    width: calc(100vw - 8px);
+    height: calc(100vh - 8px);
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    pointer-events: none;
+
+}
+
+.zoom-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .zoom-controls__button {
+        width: 25px;
+        height: 25px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        pointer-events: all;
+        cursor: pointer;
+    }
+}
