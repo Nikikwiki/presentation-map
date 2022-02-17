@@ -1,0 +1,15 @@
+/node_modules
+/dist
+/webpack-server
+/.idea
+/.vscode
+npm-debug.log
+config.js
+*.js.map
+*.xsd
+*.docx#
+*.xml
+*.docx
+*.pdf
+
+__temp__/
