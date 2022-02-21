@@ -4,35 +4,66 @@
     "minZoom": 6,
     "maxZoom": 20,
     "extent": [
-        3975211.0536368806, 7222898.848739378, 4080448.606794581, 7330333.669490481
+        3975211.0536368806, 7222898.848739378, 
+        4080448.606794581, 7330333.669490481
     ],
     "slices": [
         {
+            "id": 1,
             "date": "2022-01-01 00:00:00",
-            "type": "FeatureCollection",
-            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-            "features": [
-                { "type": "Feature", "id": 119, "properties": { "orbis_id": 119.0, "datetime": "2022-02-08 03:44:00", "string": "г. Калуга, д. Мстихино, ул. Проезд Домостроителей, д. 21", "title": "Произошло возгорание мусора на открытой территории", "number": null, "title1": null, "number2": null, "number1": 50.0, "title3": null, "title4": null, "type": "пожар", "mr": " Калуга" }, "geometry": { "type": "Point", "coordinates": [ 36.130986, 54.574272 ] } },
-                { "type": "Feature", "id": 122, "properties": { "orbis_id": 122.0, "datetime": "2022-02-08 18:47:00", "string": "г. Калуга, ул. Дубрава, д. 3", "title": "Произошло возгорание мусора в мусорном контейнере", "number": null, "title1": null, "number2": null, "number1": 1.0, "title3": null, "title4": null, "type": "пожар", "mr": "Калуга" }, "geometry": { "type": "Point", "coordinates": [ 36.329658, 54.544457 ] } }
+            "layers": [
+                {
+                    "type": "vector",
+                    "url": ""
+                },
+                {
+                    "type": "tile",
+                    "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+                }
             ]
         },
         {
-            "date": "2022-01-04 00:00:00",
-            "type": "FeatureCollection",
-            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-            "features": [
-                { "type": "Feature", "id": 130, "properties": { "orbis_id": 130.0, "datetime": "2022-01-15 15:50:00", "string": "г. Калуга, ул. Кирова, д. 1 ", "title": "поступило анонимное сообщение о заминировании гостиницы", "number": null, "title1": null, "number2": null, "number1": null, "title3": null, "title4": null, "type": "происшествие", "mr": "Калуга" }, "geometry": { "type": "Point", "coordinates": [ 36.246689, 54.516072 ] } },
-                { "type": "Feature", "id": 133, "properties": { "orbis_id": 133.0, "datetime": "2022-01-29 17:56:00", "string": "г. Калуга, ул. Линейная д.26\/6", "title": "в результате скопления снежных масс и ветхости конструкций произошло частичное обрушение кровли жилого дома", "number": null, "title1": null, "number2": null, "number1": null, "title3": null, "title4": null, "type": "происшествие", "mr": "Калуга" }, "geometry": { "type": "Point", "coordinates": [ 36.269507, 54.553282 ] } }
+            "id": 2,
+            "date": "2023-01-01 00:00:00",
+            "layers": [
+                {
+                    "type": "vector",
+                    "url": ""
+                },
+                {
+                    "type": "tile",
+                    "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+                }
             ]
-        }, 
+        },
         {
-            "date": "2022-01-23 00:00:00",
-            "type": "FeatureCollection",
-            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-            "features": [
-                { "type": "Feature", "id": 125, "properties": { "orbis_id": 125.0, "datetime": "2022-02-09 01:13:00", "string": "г. Калуга, СНТ «Зеленая Горка»", "title": "Произошло возгорание дачного дома", "number": null, "title1": null, "number2": null, "number1": 24.0, "title3": null, "title4": null, "type": "пожар", "mr": "Калуга" }, "geometry": { "type": "Point", "coordinates": [ 36.23635, 54.590004 ] } },
-                { "type": "Feature", "id": 126, "properties": { "orbis_id": 126.0, "datetime": "2022-02-09 14:54:00", "string": "г. Калуга, ул. Овражная", "title": "Произошло возгорание автомобиля", "number": null, "title1": null, "number2": null, "number1": null, "title3": "170", "title4": null, "type": "пожар", "mr": "Калуга" }, "geometry": { "type": "Point", "coordinates": [ 36.313165, 54.517159 ] } }
+            "id": 3,
+            "date": "2023-01-01 00:00:00",
+            "layers": [
+                {
+                    "type": "vector",
+                    "url": ""
+                },
+                {
+                    "type": "tile",
+                    "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "date": "2022-01-01 00:00:00",
+            "layers": [
+                {
+                    "type": "vector",
+                    "url": ""
+                },
+                {
+                    "type": "tile",
+                    "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+                }
             ]
         }
+
     ]
 }
