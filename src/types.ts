@@ -4,5 +4,12 @@ export interface ConfigType {
     minZoom: number,
     maxZoom: number,
     extent: number[],
-    slices: any[]
+    slices: Slice[]
+}
+
+export interface Slice {
+    date: string,
+    type: string,
+    crs: string,
+    features: any[]
 }

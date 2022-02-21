@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import * as olControl from 'ol/control';
 import OlMap from 'ol/Map';
@@ -7,11 +7,9 @@ import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { MouseWheelZoom, defaults } from 'ol/interaction';
 import { platformModifierKeyOnly } from 'ol/events/condition';
-import { apiService } from 'api-service';
 
 import 'rc-slider/assets/index.css';
 import { ConfigType } from 'types';
-import { AxiosResponse } from 'axios';
 import VectorLayer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
@@ -20,81 +18,83 @@ import CircleStyle from 'ol/style/Circle';
 import { DateSlider } from 'components/date-slider';
 import styles from './styles.scss';
 
-export const MapComponent = () => {
-    const mapRef = useRef<HTMLDivElement>(null);
-    let map: OlMap = new OlMap({});
+interface MapComponentProps {
+    configState: ConfigType;
+}
 
-    const [ layerDate, setLayerDate ] = useState(new Date());
-    const [ config, setConfig ] = useState<ConfigType>({
-        center: [],
-        zoom: 0,
-        minZoom: 0,
-        maxZoom: 0,
-        extent: [],
-        slices: []
-    });
+export const MapComponent = (props: MapComponentProps) => {
+    const { configState } = props;
+
+    const mapRef = useRef<any>();
+
+    let map: OlMap = new OlMap({});
 
     const image = new CircleStyle({
         radius: 10,
         fill: new Fill({
             color: '#FF9000'
         }),
-        stroke: new Stroke({ color: 'yellow', width: 4 })
+        stroke: new Stroke({ color: 'yellow', width: 2 })
     });
 
-    const handleDateChange = (value: Date) => {
-        setLayerDate(value);
-    };
-
     useEffect(() => {
-        apiService.getConfig().then((res: AxiosResponse<any>) => {
-            setConfig((prev) => ({ ...prev, ...res.data }));
-            setTimeout(() => {
-                console.log(config);
-                console.log(res.data);
-            }, 1000);
-
-            if (mapRef.current) {
-                map = new OlMap({
-                    target: mapRef.current,
-                    layers: [
-                        new TileLayer({
-                            source: new OSM()
-                        }),
+        map = new OlMap({
+            target: mapRef.current,
+            layers: [
+                new TileLayer({
+                    source: new OSM()
+                }),
+                ...configState.slices.map((slice, i) => {
+                    return (
                         new VectorLayer({
                             source: new VectorSource({
-                                features: new GeoJSON().readFeatures(config.slices[1], {
+                                features: new GeoJSON().readFeatures(slice, {
                                     dataProjection: 'EPSG:4326',
                                     featureProjection: 'EPSG:3857'
                                 })
                             }),
                             style: new Style({
                                 image: image
-                            })
+                            }),
+                            visible: i === 0
                         })
-                    ],
-                    view: new View({
-                        center: config.center,
-                        zoom: config.zoom,
-                        minZoom: config.minZoom,
-                        maxZoom: config.maxZoom,
-                        extent: config.extent,
-                        projection: 'EPSG:3857'
-                    }),
-                    controls: olControl.defaults({
-                        zoom: false,
-                        rotate: false,
-                        attribution: false
-                    }),
-                    interactions: defaults({ mouseWheelZoom: false }).extend([
-                        new MouseWheelZoom({
-                            condition: platformModifierKeyOnly
-                        })
-                    ])
-                });
-            }
+                    );
+                })
+            ],
+            view: new View({
+                center: configState.center,
+                zoom: configState.zoom,
+                minZoom: configState.minZoom,
+                maxZoom: configState.maxZoom,
+                extent: configState.extent,
+                projection: 'EPSG:3857'
+            }),
+            controls: olControl.defaults({
+                zoom: false,
+                rotate: false,
+                attribution: false
+            }),
+            interactions: defaults({ mouseWheelZoom: false }).extend([
+                new MouseWheelZoom({
+                    condition: platformModifierKeyOnly
+                })
+            ])
         });
     }, []);
+
+    const handleDateChange = (value: number) => {
+        map.getLayers().forEach((layer, i) => {
+            if (
+                Object.getPrototypeOf(layer).constructor.name !== 'TileLayer'
+            ) {
+                if (value === (i - 1)) {
+                    layer.setVisible(true);
+                } else {
+                    layer.setVisible(false);
+                }
+            }
+        });
+    };
 
     return (
         <>
@@ -135,12 +135,10 @@ export const MapComponent = () => {
                         </button>
                     </div>
                     <div className='bottom-controls'>
-                        {/* <DateSlider
-                            min={new Date(config.slices[0]?.date)}
-                            max={new Date(config.slices[config.slices.length]?.date)}
-                            layerDate={layerDate}
+                        <DateSlider
                             onChange={handleDateChange}
-                        /> */}
+                            slices={configState.slices}
+                        />
                     </div>
                 </div>
             </div>

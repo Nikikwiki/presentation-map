@@ -1,32 +1,32 @@
 import Slider, { SliderTooltip } from 'rc-slider';
 import React, { useState } from 'react';
+import { Slice } from 'types';
 
 interface DateSliderProps {
-    min: Date,
-    max: Date,
-    layerDate: Date,
-    onChange: (value: Date) => void
+    onChange: (value: number) => void,
+    slices: Slice[]
 }
 
 export const DateSlider = (props: DateSliderProps) => {
-    const { min, max, layerDate, onChange } = props;
-    const [ currentDate, setCurrentDate ] = useState(layerDate || min);
+    const { slices, onChange } = props;
     const { Handle } = Slider;
 
-    const handleChange = (value: any) => {
-        const nextCurrentDate = new Date(min.getTime());
-        nextCurrentDate.setDate(value);
+    const [ layerDate, setLayerDate ] = useState(0);
 
-        onChange(nextCurrentDate);
-
-        setCurrentDate(nextCurrentDate);
+    const handleChange = (value: number) => {
+        onChange(value);
+        setLayerDate(value);
     };
 
     const handle = ({ value, dragging, index, ...restProps }: any) => {
+        let currentDate = '';
+        slices.forEach((slice, i) => {
+            if (value === i) currentDate = slice.date;
+        });
         return (
             <SliderTooltip
                 prefixCls="rc-slider-tooltip"
-                overlay={`${value}`}
+                overlay={`${currentDate}`}
                 visible={dragging}
                 placement="top"
                 key={index}
@@ -36,14 +36,12 @@ export const DateSlider = (props: DateSliderProps) => {
         );
     };
 
-    const steps = Math.round((max.getDate() - min.getDate()) / (1000 * 60 * 60 * 24));
-    const val = Math.round((currentDate.getDate() - min.getDate()) / (1000 * 60 * 60 * 24));
-
     return (
         <Slider
             dots
-            max={steps}
-            value={val}
+            min={0}
+            max={slices.length - 1}
+            value={layerDate}
             onChange={handleChange}
             handle={handle}
 
