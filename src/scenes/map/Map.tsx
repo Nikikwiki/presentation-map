@@ -9,77 +9,73 @@ import { MouseWheelZoom, defaults } from 'ol/interaction';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 
 import 'rc-slider/assets/index.css';
-import { ConfigType } from 'types';
+import { MapConfig, Slice } from 'types';
 import VectorLayer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
 import { Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import { DateSlider } from 'components/date-slider';
+import LayerGroup from 'ol/layer/Group';
 import styles from './styles.scss';
+import { mapService } from './map-service';
 
 interface MapComponentProps {
-    configState: ConfigType;
+    mapConfig: MapConfig;
+    slices: Slice[];
 }
 
 export const MapComponent = (props: MapComponentProps) => {
-    const { configState } = props;
-
+    const { mapConfig, slices } = props;
     const mapRef = useRef<any>();
-
     let map: OlMap = new OlMap({});
 
-    const image = new CircleStyle({
-        radius: 10,
-        fill: new Fill({
-            color: '#FF9000'
-        }),
-        stroke: new Stroke({ color: 'yellow', width: 2 })
-    });
-
     useEffect(() => {
-        map = new OlMap({
-            target: mapRef.current,
-            layers: [
-                new TileLayer({
-                    source: new OSM()
-                }),
-                ...configState.slices.map((slice, i) => {
-                    return (
-                        new VectorLayer({
-                            source: new VectorSource({
-                                features: new GeoJSON().readFeatures(slice, {
-                                    dataProjection: 'EPSG:4326',
-                                    featureProjection: 'EPSG:3857'
-                                })
-                            }),
-                            style: new Style({
-                                image: image
-                            }),
-                            visible: i === 0
-                        })
-                    );
-                })
-            ],
-            view: new View({
-                center: configState.center,
-                zoom: configState.zoom,
-                minZoom: configState.minZoom,
-                maxZoom: configState.maxZoom,
-                extent: configState.extent,
-                projection: 'EPSG:3857'
-            }),
-            controls: olControl.defaults({
-                zoom: false,
-                rotate: false,
-                attribution: false
-            }),
-            interactions: defaults({ mouseWheelZoom: false }).extend([
-                new MouseWheelZoom({
-                    condition: platformModifierKeyOnly
-                })
-            ])
-        });
+        const groups = mapService.createMapGroups(slices);
+
+        // const groups = mapService.createMapGroups(configState.slices);
+        // map = new OlMap({
+        //     target: mapRef.current,
+        //     layers: [
+        //         new TileLayer({
+        //             source: new OSM()
+        //         }),
+        //         ...configState.slices.map((slice, i) => {
+        //             return (
+        //                 new VectorLayer({
+        //                     source: new VectorSource({
+        //                         features: new GeoJSON().readFeatures(slice, {
+        //                             dataProjection: 'EPSG:4326',
+        //                             featureProjection: 'EPSG:3857'
+        //                         })
+        //                     }),
+        //                     style: new Style({
+        //                         image: image
+        //                     }),
+        //                     visible: i === 0
+        //                 })
+        //             );
+        //         })
+        //     ],
+        //     view: new View({
+        //         center: mapConfig.center,
+        //         zoom: mapConfig.zoom,
+        //         minZoom: mapConfig.minZoom,
+        //         maxZoom: mapConfig.maxZoom,
+        //         extent: mapConfig.extent,
+        //         projection: 'EPSG:3857'
+        //     }),
+        //     controls: olControl.defaults({
+        //         zoom: false,
+        //         rotate: false,
+        //         attribution: false
+        //     }),
+        //     interactions: defaults({ mouseWheelZoom: false }).extend([
+        //         new MouseWheelZoom({
+        //             condition: platformModifierKeyOnly
+        //         })
+        //     ])
+        // });
     }, []);
 
     const handleDateChange = (value: number) => {
@@ -102,10 +98,10 @@ export const MapComponent = (props: MapComponentProps) => {
                 <div className='controls'>
                     <div className="bottom-controls"></div>
                     <div className='bottom-controls'>
-                        <DateSlider
+                        {/* <DateSlider
                             onChange={handleDateChange}
                             slices={configState.slices}
-                        />
+                        /> */}
                     </div>
                     <div className="zoom-controls-wrapper">
                         <div className='zoom-controls'>

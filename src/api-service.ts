@@ -1,11 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
-import { ConfigType } from './types';
+import { MapConfig, Slice } from './types';
 
 class ApiService {
-    private configUrl = 'config.json';
+    private mapConfigUrl = 'map-config.json';
+    private slicesUrl = 'slices.json';
 
-    async getConfig(): Promise<AxiosResponse<ConfigType>> {
-        return axios.get(this.configUrl);
+    public async getMapConfig(): Promise<AxiosResponse<MapConfig>> {
+        return axios.get(this.mapConfigUrl);
+    }
+
+    public async getSlices(): Promise<AxiosResponse<Slice[]>> {
+        return axios.get(this.slicesUrl);
     }
 }
 

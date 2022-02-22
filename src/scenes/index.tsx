@@ -1,33 +1,38 @@
 import { apiService } from 'api-service';
 import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ConfigType } from 'types';
+import { MapConfig, Slice } from 'types';
 import { Map } from './map';
 
 export const RootScene: React.FC<any> = (): JSX.Element => {
-    const [ configState, setConfigState ] = useState<ConfigType>(
+    const [ mapConfigState, setMapConfigState ] = useState<MapConfig>(
         {
             center: [],
             zoom: 0,
             minZoom: 0,
             maxZoom: 0,
-            extent: [],
-            slices: []
+            extent: []
         }
     );
 
+    const [ slices, setSlices ] = useState<Slice[]>([]);
+
     useEffect(() => {
-        apiService.getConfig().then((res:AxiosResponse<ConfigType>) => {
-            setConfigState(res.data);
+        Promise.all([
+            apiService.getMapConfig(),
+            apiService.getSlices()
+        ]).then((res: AxiosResponse<any>[]) => {
+            setMapConfigState(res[0].data);
+            setSlices(res[1].data);
         });
     }, []);
 
     return (
         <>
             {
-                configState.slices.length > 0 ? (
-                    <Map configState={configState} />
-                ) : null
+                mapConfigState.zoom > 0 && slices.length > 0
+                    ? <Map mapConfig={mapConfigState} slices={slices} />
+                    : null
             }
         </>
     );

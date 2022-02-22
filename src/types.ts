@@ -1,15 +1,19 @@
-export interface ConfigType {
+export interface MapConfig {
     center: number[],
     zoom: number,
     minZoom: number,
     maxZoom: number,
     extent: number[],
-    slices: Slice[]
 }
 
 export interface Slice {
+    id: number,
     date: string,
     type: string,
-    crs: string,
-    features: any[]
+    layers: Layer[]
+}
+
+export interface Layer {
+    type: string,
+    url: string
 }
