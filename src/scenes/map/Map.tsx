@@ -1,20 +1,9 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import * as olControl from 'ol/control';
 import OlMap from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import { MouseWheelZoom, defaults } from 'ol/interaction';
-import { platformModifierKeyOnly } from 'ol/events/condition';
 
 import 'rc-slider/assets/index.css';
 import { MapConfig, Slice } from 'types';
-import VectorLayer from 'ol/layer/Vector';
-import GeoJSON from 'ol/format/GeoJSON';
-import VectorSource from 'ol/source/Vector';
-import { Fill, Stroke, Style } from 'ol/style';
-import CircleStyle from 'ol/style/Circle';
 import { DateSlider } from 'components/date-slider';
 import LayerGroup from 'ol/layer/Group';
 import styles from './styles.scss';
@@ -28,68 +17,19 @@ interface MapComponentProps {
 export const MapComponent = (props: MapComponentProps) => {
     const { mapConfig, slices } = props;
     const mapRef = useRef<any>();
-    let map: OlMap = new OlMap({});
+    const [ map, setMap ] = useState(new OlMap({}));
+    const [ layerGroups, setLayerGroups ] = useState<LayerGroup[]>([]);
 
     useEffect(() => {
-        const groups = mapService.createMapGroups(slices);
-
-        // const groups = mapService.createMapGroups(configState.slices);
-        // map = new OlMap({
-        //     target: mapRef.current,
-        //     layers: [
-        //         new TileLayer({
-        //             source: new OSM()
-        //         }),
-        //         ...configState.slices.map((slice, i) => {
-        //             return (
-        //                 new VectorLayer({
-        //                     source: new VectorSource({
-        //                         features: new GeoJSON().readFeatures(slice, {
-        //                             dataProjection: 'EPSG:4326',
-        //                             featureProjection: 'EPSG:3857'
-        //                         })
-        //                     }),
-        //                     style: new Style({
-        //                         image: image
-        //                     }),
-        //                     visible: i === 0
-        //                 })
-        //             );
-        //         })
-        //     ],
-        //     view: new View({
-        //         center: mapConfig.center,
-        //         zoom: mapConfig.zoom,
-        //         minZoom: mapConfig.minZoom,
-        //         maxZoom: mapConfig.maxZoom,
-        //         extent: mapConfig.extent,
-        //         projection: 'EPSG:3857'
-        //     }),
-        //     controls: olControl.defaults({
-        //         zoom: false,
-        //         rotate: false,
-        //         attribution: false
-        //     }),
-        //     interactions: defaults({ mouseWheelZoom: false }).extend([
-        //         new MouseWheelZoom({
-        //             condition: platformModifierKeyOnly
-        //         })
-        //     ])
-        // });
+        mapService.generateMap(mapConfig, slices, mapRef).then(res => {
+            setMap(res.map);
+            setLayerGroups(res.groups);
+        });
     }, []);
 
     const handleDateChange = (value: number) => {
-        map.getLayers().forEach((layer, i) => {
-            if (
-                Object.getPrototypeOf(layer).constructor.name !== 'TileLayer'
-            ) {
-                if (value === (i - 1)) {
-                    layer.setVisible(true);
-                } else {
-                    layer.setVisible(false);
-                }
-            }
-        });
+        layerGroups.forEach(group => group.setVisible(false));
+        layerGroups[value].setVisible(true);
     };
 
     return (
@@ -98,10 +38,10 @@ export const MapComponent = (props: MapComponentProps) => {
                 <div className='controls'>
                     <div className="bottom-controls"></div>
                     <div className='bottom-controls'>
-                        {/* <DateSlider
+                        <DateSlider
                             onChange={handleDateChange}
-                            slices={configState.slices}
-                        /> */}
+                            slices={slices}
+                        />
                     </div>
                     <div className="zoom-controls-wrapper">
                         <div className='zoom-controls'>
