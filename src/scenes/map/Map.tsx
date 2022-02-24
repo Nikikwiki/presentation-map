@@ -33,54 +33,53 @@ export const MapComponent = (props: MapComponentProps) => {
     };
 
     return (
-        <>
-            <div className={styles.map} ref={mapRef}>
-                <div className='controls'>
-                    <div className="bottom-controls"></div>
-                    <div className='bottom-controls'>
-                        <DateSlider
-                            onChange={handleDateChange}
-                            slices={slices}
-                        />
-                    </div>
-                    <div className="zoom-controls-wrapper">
-                        <div className='zoom-controls'>
-                            <button
-                                type="button"
-                                title='Zoom in'
-                                className='zoom-controls__button'
-                                onClick={() => {
-                                    const zoom = map.getView().getZoom();
-                                    if (zoom !== undefined) {
-                                        map.getView().animate({
-                                            zoom: zoom + 1,
-                                            duration: 250
-                                        });
-                                    }
-                                }}
-                            >
-                                +
-                            </button>
-                            <button
-                                type="button"
-                                title='Zoom out'
-                                className='zoom-controls__button'
-                                onClick={() => {
-                                    const zoom = map.getView().getZoom();
-                                    if (zoom !== undefined) {
-                                        map.getView().animate({
-                                            zoom: zoom - 1,
-                                            duration: 250
-                                        });
-                                    }
-                                }}
-                            >
-                                –
-                            </button>
-                        </div>
+        <div className={styles.mapWrapper}>
+            <div className={styles.map} ref={mapRef}></div>
+            <div className={styles.controls}>
+                <div className={styles.bottomControls}></div>
+                <div className={styles.bottomControls}>
+                    <DateSlider
+                        onChange={handleDateChange}
+                        slices={slices}
+                    />
+                </div>
+                <div className={styles.zoomControlsWrapper}>
+                    <div className={styles.zoomControls}>
+                        <button
+                            type="button"
+                            title='Zoom in'
+                            className='zoom-controls__button'
+                            onClick={() => {
+                                const zoom = map.getView().getZoom();
+                                if (zoom !== undefined) {
+                                    map.getView().animate({
+                                        zoom: zoom + 1,
+                                        duration: 250
+                                    });
+                                }
+                            }}
+                        >
+                            +
+                        </button>
+                        <button
+                            type="button"
+                            title='Zoom out'
+                            className='zoom-controls__button'
+                            onClick={() => {
+                                const zoom = map.getView().getZoom();
+                                if (zoom !== undefined) {
+                                    map.getView().animate({
+                                        zoom: zoom - 1,
+                                        duration: 250
+                                    });
+                                }
+                            }}
+                        >
+                            –
+                        </button>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };

@@ -1,12 +1,17 @@
+.map-wrapper {
+    height: 100%;
+    width: 100%;
+    position: relative;    
+}
+
 .map {
     height: 100%;
     width: 100%;
-    position: relative;
+    position: absolute;
 }
 
 .controls {
     position: absolute;
-    z-index: 99999;
     width: calc(100vw - 8px);
     height: calc(100vh - 24px);
     pointer-events: none;

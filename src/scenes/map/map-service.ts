@@ -15,27 +15,16 @@ import { platformModifierKeyOnly } from 'ol/events/condition';
 import XYZ from 'ol/source/XYZ';
 
 class MapService {
-    public image = new CircleStyle({
-        radius: 10,
-        fill: new Fill({
-            color: '#FF9000'
-        }),
-        stroke: new Stroke({ color: 'yellow', width: 2 })
-    });
-
     public async generateMap(mapConfig: MapConfig, slices: Slice[], mapRef:any): Promise<{
         map: OlMap,
         groups: LayerGroup[]
     }> {
-        const groups = await Promise.resolve(this.createMapGroups(slices));
-
         const map = new OlMap({
             target: mapRef.current,
             layers: [
                 new TileLayer({
                     source: new OSM()
-                }),
-                ...groups
+                })
             ],
             view: new View({
                 center: mapConfig.center,
@@ -56,6 +45,10 @@ class MapService {
                 })
             ])
         });
+
+        const groups = await Promise.resolve(this.createMapGroups(slices));
+
+        groups.forEach(group => map.addLayer(group));
 
         const mapGroups = {
             map, groups
@@ -95,7 +88,7 @@ class MapService {
                                     })
                                 }),
                                 style: new Style({
-                                    image: this.image
+                                    image: this.generateCircleStyle()
                                 })
                             })
                         );
@@ -130,6 +123,25 @@ class MapService {
 
     private async getLayer(url: string): Promise<AxiosResponse<any>> {
         return axios.get(url);
+    }
+
+    private generateCircleStyle() {
+        return new CircleStyle({
+            radius: 10,
+            fill: new Fill({
+                color: this.getRandomColor()
+            }),
+            stroke: new Stroke({ color: 'yellow', width: 2 })
+        });
+    }
+
+    private getRandomColor() {
+        let letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
 }
 export const mapService = new MapService();
