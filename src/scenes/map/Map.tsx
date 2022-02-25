@@ -6,6 +6,7 @@ import 'rc-slider/assets/index.css';
 import { MapConfig, Slice } from 'types';
 import { DateSlider } from 'components/date-slider';
 import LayerGroup from 'ol/layer/Group';
+import { Icons } from 'components';
 import styles from './styles.scss';
 import { mapService } from './map-service';
 
@@ -78,6 +79,19 @@ export const MapComponent = (props: MapComponentProps) => {
                             –
                         </button>
                     </div>
+                </div>
+            </div>
+            <div className={styles.popupWindow}>
+                <div className={styles.popupWindowHeader}>
+                    <div className={styles.popupWindowHeaderText}>Здарова, я хедер.</div>
+                    <button
+                        type='button'
+                        className={styles.popupWindowHeaderButton}
+                    >
+                        <Icons.IconClose />
+                    </button>
+                </div>
+                <div>
                 </div>
             </div>
         </div>

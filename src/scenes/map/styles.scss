@@ -55,3 +55,42 @@
     pointer-events: all;
     cursor: pointer;
 }
+
+.popupWindow {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 30%;
+    height: 60%;
+
+    
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px gray;
+    background-color: #fff;
+
+    .popupWindowHeader {
+        height: 10%;
+        border-bottom: 3px solid #d8d2d2;
+
+        padding-left: 16px;
+        padding-right: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .popupWindowHeaderText {
+            font-size: 14px;
+            font-weight: 600;
+            font-family: Arial;
+        }
+
+        .popupWindowHeaderButton {
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            cursor: pointer;
+            border: none;
+
+        }
+    }
+}
