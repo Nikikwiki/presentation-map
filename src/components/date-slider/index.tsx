@@ -1,6 +1,8 @@
 import Slider, { SliderTooltip } from 'rc-slider';
 import React, { useState } from 'react';
 import { Slice } from 'types';
+import 'react-pro-sidebar/dist/css/styles.css';
+import styles from './styles.scss';
 
 interface DateSliderProps {
     onChange: (value: number) => void,
@@ -44,7 +46,7 @@ export const DateSlider = (props: DateSliderProps) => {
             value={layerDate}
             onChange={handleChange}
             handle={handle}
-
+            className={styles.slider}
         />
     );
 };

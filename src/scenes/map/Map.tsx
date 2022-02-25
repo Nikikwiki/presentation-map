@@ -6,7 +6,8 @@ import 'rc-slider/assets/index.css';
 import { MapConfig, Slice } from 'types';
 import { DateSlider } from 'components/date-slider';
 import LayerGroup from 'ol/layer/Group';
-import { Icons } from 'components';
+
+import { Sidebar } from 'components/sidebar';
 import styles from './styles.scss';
 import { mapService } from './map-service';
 
@@ -20,6 +21,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const mapRef = useRef<any>();
     const [ map, setMap ] = useState(new OlMap({}));
     const [ layerGroups, setLayerGroups ] = useState<LayerGroup[]>([]);
+    const [ clickedFeature, setClickedFeature ] = useState<any>(null);
 
     useEffect(() => {
         mapService.generateMap(mapConfig, slices, mapRef).then(res => {
@@ -32,6 +34,17 @@ export const MapComponent = (props: MapComponentProps) => {
         layerGroups.forEach(group => group.setVisible(false));
         layerGroups[value].setVisible(true);
     };
+
+    map.on('click', (e) => {
+        const feature = map.forEachFeatureAtPixel(e.pixel, (f, layer) => {
+            return f;
+        });
+        if (feature) {
+            setClickedFeature(feature);
+        } else {
+            setClickedFeature(null);
+        }
+    });
 
     return (
         <div className={styles.mapWrapper}>
@@ -81,19 +94,7 @@ export const MapComponent = (props: MapComponentProps) => {
                     </div>
                 </div>
             </div>
-            <div className={styles.popupWindow}>
-                <div className={styles.popupWindowHeader}>
-                    <div className={styles.popupWindowHeaderText}>Здарова, я хедер.</div>
-                    <button
-                        type='button'
-                        className={styles.popupWindowHeaderButton}
-                    >
-                        <Icons.IconClose />
-                    </button>
-                </div>
-                <div>
-                </div>
-            </div>
+            <Sidebar feature={clickedFeature?.getProperties()} />
         </div>
     );
 };
