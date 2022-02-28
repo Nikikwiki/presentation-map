@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ProSidebar, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
+import { ProSidebar, SidebarHeader, SidebarContent } from 'react-pro-sidebar';
+import styles from './styles.scss';
 
 export const Sidebar = (props: any) => {
     const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
@@ -14,28 +15,40 @@ export const Sidebar = (props: any) => {
         }
     }, [ feature ]);
 
+    const renderContent = () => {
+        if (feature) {
+            const a = Object.entries(feature).map(([ key, value ], i) => {
+                if (typeof (value) === 'string') {
+                    return (
+                        <div key={i.toString()}>
+                            {key}
+                            :
+                            {' '}
+                            {value}
+                        </div>
+                    );
+                } else {
+                    return null;
+                }
+            });
+            return a;
+        } else {
+            return null;
+        }
+    };
+
     return (
-        <div>
-            {
-                feature
-                    ? (
-                        <ProSidebar collapsed={sidebarCollapse} collapsedWidth='0px'>
-                            <SidebarHeader>
-                                {feature.mr}
-                            </SidebarHeader>
-                            <SidebarContent>
-                                {feature.string}
-                                ,
-                                {feature.title}
-                                ,
-                                {feature.type}
-                            </SidebarContent>
-                            <SidebarFooter>
-                                Footer
-                            </SidebarFooter>
-                        </ProSidebar>
-                    ) : null
-            }
+        <div className={styles.sidebarWrapper}>
+            <ProSidebar collapsed={sidebarCollapse} collapsedWidth='0px'>
+                <SidebarHeader className={styles.header}>
+                    {feature?.mr}
+                </SidebarHeader>
+                <SidebarContent className={styles.content}>
+                    {
+                        renderContent()
+                    }
+                </SidebarContent>
+            </ProSidebar>
         </div>
     );
 };
