@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ProSidebar, SidebarHeader, SidebarContent } from 'react-pro-sidebar';
+import { ProSidebar, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
 import styles from './styles.scss';
 
 export const Sidebar = (props: any) => {
@@ -15,13 +15,17 @@ export const Sidebar = (props: any) => {
         }
     }, [ feature ]);
 
+    const hideSidebar = () => {
+        setSidebarCollapse(true);
+    };
+
     const renderContent = () => {
         if (feature) {
-            const a = Object.entries(feature).map(([ key, value ], i) => {
+            return Object.entries(feature).map(([ key, value ], i) => {
                 if (typeof (value) === 'string') {
                     return (
-                        <div key={i.toString()}>
-                            {key}
+                        <div key={i.toString()} className={styles.contentBlock}>
+                            <span className={styles.contentTitle}>{key}</span>
                             :
                             {' '}
                             {value}
@@ -31,7 +35,6 @@ export const Sidebar = (props: any) => {
                     return null;
                 }
             });
-            return a;
         } else {
             return null;
         }
@@ -48,6 +51,15 @@ export const Sidebar = (props: any) => {
                         renderContent()
                     }
                 </SidebarContent>
+                <SidebarFooter className={styles.footer}>
+                    <button
+                        type='button'
+                        className={styles.footerButton}
+                        onClick={() => hideSidebar()}
+                    >
+                        Свернуть
+                    </button>
+                </SidebarFooter>
             </ProSidebar>
         </div>
     );
