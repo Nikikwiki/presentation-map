@@ -1,3 +1,13 @@
 .slider {
     pointer-events: all;
+
+    .sliderSpan {
+        font-weight: bold;
+        color: #000;
+    }
+}
+
+.radioButton {
+    position: absolute;
+    z-index: 10;
 }

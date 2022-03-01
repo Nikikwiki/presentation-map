@@ -19,20 +19,24 @@
     display: flex;
 }
 
-.zoom-controls {
-    align-items: flex-end;
-    text-align: right;
-
+.rightControls {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    flex-grow: 1;
 
-    &-wrapper {
+    .rightControlsContent {
         flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
     }
+
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    flex-direction: column;
+    gap: 8px;
 
     .zoom-controls__button {
         width: 25px;
@@ -55,4 +59,11 @@
     &.slider {
         pointer-events: all;
     }
+}
+
+.sliderWrapper {
+    padding: 8px 24px 24px;
+    border-radius: 6px;
+    background-color: #6ab7ff;
+    width: 100%;
 }

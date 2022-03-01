@@ -52,12 +52,15 @@ export const MapComponent = (props: MapComponentProps) => {
             <div className={styles.controls}>
                 <div className={styles.bottomControls}></div>
                 <div className={styles.bottomControls}>
-                    <DateSlider
-                        onChange={handleDateChange}
-                        slices={slices}
-                    />
+                    <div className={styles.sliderWrapper}>
+                        <DateSlider
+                            onChange={handleDateChange}
+                            slices={slices}
+                        />
+                    </div>
                 </div>
-                <div className={styles.zoomControlsWrapper}>
+                <div className={styles.rightControls}>
+                    <div className={styles.rightControlsContent}></div>
                     <div className={styles.zoomControls}>
                         <button
                             type="button"
@@ -92,6 +95,7 @@ export const MapComponent = (props: MapComponentProps) => {
                             –
                         </button>
                     </div>
+                    <div className={styles.rightControlsContent}></div>
                 </div>
             </div>
             <Sidebar feature={clickedFeature?.getProperties()} />

@@ -15,6 +15,10 @@ export const DateSlider = (props: DateSliderProps) => {
 
     const [ layerDate, setLayerDate ] = useState(0);
 
+    const marks = Object.fromEntries(slices.map((slice, i) => {
+        return [ i, <span className={styles.sliderSpan}>{slice.date.slice(0, 4)}</span> ];
+    }));
+
     const handleChange = (value: number) => {
         onChange(value);
         setLayerDate(value);
@@ -28,7 +32,7 @@ export const DateSlider = (props: DateSliderProps) => {
         return (
             <SliderTooltip
                 prefixCls="rc-slider-tooltip"
-                overlay={`${currentDate}`}
+                overlay={`${currentDate.slice(0, 10)}`}
                 visible={dragging}
                 placement="top"
                 key={index}
@@ -47,6 +51,7 @@ export const DateSlider = (props: DateSliderProps) => {
             onChange={handleChange}
             handle={handle}
             className={styles.slider}
+            marks={marks}
         />
     );
 };
