@@ -60,7 +60,15 @@ export const MapComponent = (props: MapComponentProps) => {
                     </div>
                 </div>
                 <div className={styles.rightControls}>
-                    <div className={styles.rightControlsContent}></div>
+                    <div className={styles.diffControls}>
+                        <button
+                            type='button'
+                            className={styles.diffControlsButton}
+                        >
+                            Показать различия
+
+                        </button>
+                    </div>
                     <div className={styles.zoomControls}>
                         <button
                             type="button"

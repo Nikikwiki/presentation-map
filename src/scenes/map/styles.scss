@@ -28,6 +28,22 @@
         flex-grow: 1;
     }
 
+    .diffControls {
+        flex-grow: 1;
+        text-align: right;
+        margin-top: 16px;
+
+        .diffControlsButton {
+            padding: 8px;
+            background-color: #5c6bc0;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            pointer-events: all;
+        }
+    }
+
 }
 
 .zoom-controls {
@@ -62,8 +78,9 @@
 }
 
 .sliderWrapper {
-    padding: 8px 24px 24px;
-    border-radius: 6px;
-    background-color: #6ab7ff;
     width: 100%;
+}
+
+.sliderSpan {
+    color: #fff !important;
 }

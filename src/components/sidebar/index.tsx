@@ -42,7 +42,11 @@ export const Sidebar = (props: any) => {
 
     return (
         <div className={styles.sidebarWrapper}>
-            <ProSidebar collapsed={sidebarCollapse} collapsedWidth='0px'>
+            <ProSidebar
+                className={styles.sidebar}
+                collapsed={sidebarCollapse}
+                collapsedWidth='0px'
+            >
                 <SidebarHeader className={styles.header}>
                     {feature?.mr}
                 </SidebarHeader>

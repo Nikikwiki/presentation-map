@@ -66,5 +66,19 @@
                 "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
+    },
+    {
+        "id": 5,
+        "date": "2025-01-01 00:00:00",
+        "layers": [
+            {
+                "type": "vector",
+                "url": "vector-layer.geojson"
+            },
+            {
+                "type": "tile",
+                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+            }
+        ]
     }
 ]

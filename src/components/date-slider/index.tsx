@@ -42,16 +42,35 @@ export const DateSlider = (props: DateSliderProps) => {
         );
     };
 
+    const renderRadioButtons = () => {
+        return slices.map((_, i) => (
+            <input
+                type="radio"
+                name="radioDate"
+                value={i}
+                key={i.toString()}
+                className={styles.radioInput}
+            />
+        ));
+    };
+
     return (
-        <Slider
-            dots
-            min={0}
-            max={slices.length - 1}
-            value={layerDate}
-            onChange={handleChange}
-            handle={handle}
-            className={styles.slider}
-            marks={marks}
-        />
+        <div className={styles.wrapperComponent}>
+            <div className={styles.buttonGroup}>
+                {renderRadioButtons()}
+            </div>
+            <div className={styles.wrapperSlider}>
+                <Slider
+                    dots
+                    min={0}
+                    max={slices.length - 1}
+                    value={layerDate}
+                    onChange={handleChange}
+                    handle={handle}
+                    className={styles.slider}
+                    marks={marks}
+                />
+            </div>
+        </div>
     );
 };
