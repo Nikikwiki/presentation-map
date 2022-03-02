@@ -7,7 +7,11 @@ import { MapConfig, Slice } from 'types';
 import { DateSlider } from 'components/date-slider';
 import LayerGroup from 'ol/layer/Group';
 
+import 'ol-ext/dist/ol-ext.css';
+import Swipe from 'ol-ext/control/Swipe';
+
 import { Sidebar } from 'components/sidebar';
+import { SwipeGroup } from 'components/swipe-group';
 import styles from './styles.scss';
 import { mapService } from './map-service';
 
@@ -22,6 +26,11 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ map, setMap ] = useState(new OlMap({}));
     const [ layerGroups, setLayerGroups ] = useState<LayerGroup[]>([]);
     const [ clickedFeature, setClickedFeature ] = useState<any>(null);
+    const [ swipeLayerNumber, setSwipeLayerNumber ] = useState<number>(0);
+    const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
+    const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
+
+    const swipeControl = new Swipe();
 
     useEffect(() => {
         mapService.generateMap(mapConfig, slices, mapRef).then(res => {
@@ -33,10 +42,34 @@ export const MapComponent = (props: MapComponentProps) => {
     const handleDateChange = (value: number) => {
         layerGroups.forEach(group => group.setVisible(false));
         layerGroups[value].setVisible(true);
+        setSliderLayerNumber(value);
+    };
+
+    const handleSwipeLayerNumberChange = (value: number) => {
+        setSwipeLayerNumber(value);
+    };
+
+    const showDiff = () => {
+        map.addControl(swipeControl);
+
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, false);
+        });
+
+        layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, true);
+        });
+
+        setShowLayerDiff(true);
+    };
+
+    const hideDiff = () => {
+        map.removeControl(swipeControl);
+        setShowLayerDiff(false);
     };
 
     map.on('click', (e) => {
-        const feature = map.forEachFeatureAtPixel(e.pixel, (f, layer) => {
+        const feature = map.forEachFeatureAtPixel(e.pixel, (f, _) => {
             return f;
         });
         if (feature) {
@@ -46,6 +79,11 @@ export const MapComponent = (props: MapComponentProps) => {
         }
     });
 
+    map.on('pointermove', (e) => {
+        let hit = map.hasFeatureAtPixel(e.pixel);
+        map.getTargetElement().style.cursor = (hit ? 'pointer' : '');
+    });
+
     return (
         <div className={styles.mapWrapper}>
             <div className={styles.map} ref={mapRef}></div>
@@ -53,6 +91,10 @@ export const MapComponent = (props: MapComponentProps) => {
                 <div className={styles.bottomControls}></div>
                 <div className={styles.bottomControls}>
                     <div className={styles.sliderWrapper}>
+                        <SwipeGroup
+                            slices={slices}
+                            onChange={handleSwipeLayerNumberChange}
+                        />
                         <DateSlider
                             onChange={handleDateChange}
                             slices={slices}
@@ -61,13 +103,27 @@ export const MapComponent = (props: MapComponentProps) => {
                 </div>
                 <div className={styles.rightControls}>
                     <div className={styles.diffControls}>
-                        <button
-                            type='button'
-                            className={styles.diffControlsButton}
-                        >
-                            Показать различия
-
-                        </button>
+                        {
+                            showLayerDiff
+                                ? (
+                                    <button
+                                        type='button'
+                                        className={styles.diffControlsButton}
+                                        onClick={() => hideDiff()}
+                                    >
+                                        Скрыть различия
+                                    </button>
+                                )
+                                : (
+                                    <button
+                                        type='button'
+                                        className={styles.diffControlsButton}
+                                        onClick={() => showDiff()}
+                                    >
+                                        Показать различия
+                                    </button>
+                                )
+                        }
                     </div>
                     <div className={styles.zoomControls}>
                         <button

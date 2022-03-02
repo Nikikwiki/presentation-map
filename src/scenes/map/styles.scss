@@ -79,8 +79,18 @@
 
 .sliderWrapper {
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .sliderSpan {
     color: #fff !important;
+}
+
+.olSwipe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 9999999;
+    pointer-events: all;
 }

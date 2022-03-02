@@ -32,10 +32,6 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson"
-            },
-            {
-                "type": "tile",
-                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
     },
@@ -60,10 +56,6 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson"
-            },
-            {
-                "type": "tile",
-                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
     },

@@ -1,0 +1,15 @@
+.buttonGroup {
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: all;
+    border-radius: 8px;
+    background-color: rgb(166, 218, 166);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    .radioInput {
+        cursor: pointer;
+    }
+}
