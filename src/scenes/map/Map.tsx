@@ -125,49 +125,30 @@ export const MapComponent = (props: MapComponentProps) => {
         <div className={styles.mapWrapper}>
             <div className={styles.map} ref={mapRef}></div>
             <div className={styles.controls}>
-                <div className={styles.leftControls}></div>
-                <div className={styles.bottomControls}>
-                    <div className={styles.sliderWrapper}>
-                        <DateSlider
-                            onChange={handleDateChange}
-                            slices={slices}
-                        />
-                        {
-                            showLayerDiff
-                                ? (
-                                    <DateSlider
-                                        onChange={handleSwipeLayerNumberChange}
-                                        slices={slices}
-                                    />
-                                ) : null
-
-                        }
-                    </div>
+                <div className={styles.topControls}>
+                    {
+                        showLayerDiff
+                            ? (
+                                <button
+                                    type='button'
+                                    className={styles.diffControlsButton}
+                                    onClick={() => hideDiff()}
+                                >
+                                    Сравнить
+                                </button>
+                            )
+                            : (
+                                <button
+                                    type='button'
+                                    className={styles.diffControlsButton}
+                                    onClick={() => showDiff()}
+                                >
+                                    Сравнить
+                                </button>
+                            )
+                    }
                 </div>
-                <div className={styles.rightControls}>
-                    <div className={styles.diffControls}>
-                        {
-                            showLayerDiff
-                                ? (
-                                    <button
-                                        type='button'
-                                        className={styles.diffControlsButton}
-                                        onClick={() => hideDiff()}
-                                    >
-                                        Скрыть различия
-                                    </button>
-                                )
-                                : (
-                                    <button
-                                        type='button'
-                                        className={styles.diffControlsButton}
-                                        onClick={() => showDiff()}
-                                    >
-                                        Показать различия
-                                    </button>
-                                )
-                        }
-                    </div>
+                <div className={styles.midControls}>
                     <div className={styles.zoomControls}>
                         <button
                             type="button"
@@ -203,6 +184,24 @@ export const MapComponent = (props: MapComponentProps) => {
                         </button>
                     </div>
                     <div className={styles.rightControlsContent}></div>
+                </div>
+                <div className={styles.bottomControls}>
+                    <div className={styles.sliderWrapper}>
+                        <DateSlider
+                            onChange={handleDateChange}
+                            slices={slices}
+                        />
+                        {
+                            showLayerDiff
+                                ? (
+                                    <DateSlider
+                                        onChange={handleSwipeLayerNumberChange}
+                                        slices={slices}
+                                    />
+                                ) : null
+
+                        }
+                    </div>
                 </div>
             </div>
             <Sidebar feature={clickedFeature?.getProperties()} />

@@ -17,32 +17,16 @@
     pointer-events: none;
     text-align: center;
     display: flex;
+    flex-direction: column;
 }
 
-.rightControls {
-    width: 15%;
+.midControls {
     display: flex;
     flex-direction: column;
     margin-right: 8px;
 
     .rightControlsContent {
         flex-grow: 1;
-    }
-
-    .diffControls {
-        flex-grow: 1;
-        text-align: right;
-        margin-top: 16px;
-
-        .diffControlsButton {
-            padding: 8px;
-            background-color: #5c6bc0;
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            cursor: pointer;
-            pointer-events: all;
-        }
     }
 
 }
@@ -69,9 +53,8 @@
 }
 
 .bottom-controls {
-    width: 70%;
-    flex-grow: 1;
     display: flex;
+    flex-grow: 1;
     align-items: flex-end;
     margin-bottom: 8px;
 
@@ -80,13 +63,26 @@
     }
 }
 
-.leftControls {
-    width: 15%;
-    margin-left: 8px;
+.topControls {
+    margin-top: 8px;
+    margin-right: 8px;
+    text-align: right;
+    flex-grow: 1;
+
+    .diffControlsButton {
+        padding: 8px;
+        background-color: #5c6bc0;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        pointer-events: all;
+    }
 }
 
 .sliderWrapper {
     display: flex;
+    justify-content: space-around;
     width: 100%;
     gap: 16px;
 }
