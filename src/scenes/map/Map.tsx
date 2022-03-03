@@ -60,11 +60,16 @@ export const MapComponent = (props: MapComponentProps) => {
             swipeControl.addLayer(layer, true);
         });
 
+        layerGroups[swipeLayerNumber].setVisible(true);
+
         setShowLayerDiff(true);
     };
 
     const hideDiff = () => {
-        map.removeControl(swipeControl);
+        swipeControl.removeLayers();
+        map.getControls().forEach(control => map.removeControl(control));
+        handleDateChange(sliderLayerNumber);
+
         setShowLayerDiff(false);
     };
 

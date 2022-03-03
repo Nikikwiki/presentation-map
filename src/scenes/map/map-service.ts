@@ -48,7 +48,12 @@ class MapService {
 
         const groups = await Promise.resolve(this.createMapGroups(slices));
 
-        groups.forEach(group => map.addLayer(group));
+        groups.forEach((group, i) => {
+            if (i === 0) {
+                group.setVisible(true);
+            }
+            map.addLayer(group);
+        });
 
         const mapGroups = {
             map, groups
@@ -109,7 +114,7 @@ class MapService {
                             ...tileLayers,
                             ...vectorLayers
                         ],
-                        visible: true
+                        visible: false
                     });
                     return group;
                 });
