@@ -52,15 +52,15 @@ export const MapComponent = (props: MapComponentProps) => {
     const showDiff = () => {
         map.addControl(swipeControl);
 
-        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-            swipeControl.addLayer(layer, false);
-        });
+        // layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+        //     swipeControl.addLayer(layer, false);
+        // });
 
-        layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
-            swipeControl.addLayer(layer, true);
-        });
+        // layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
+        //     swipeControl.addLayer(layer, true);
+        // });
 
-        layerGroups[swipeLayerNumber].setVisible(true);
+        // layerGroups[swipeLayerNumber].setVisible(true);
 
         setShowLayerDiff(true);
     };
@@ -93,17 +93,23 @@ export const MapComponent = (props: MapComponentProps) => {
         <div className={styles.mapWrapper}>
             <div className={styles.map} ref={mapRef}></div>
             <div className={styles.controls}>
-                <div className={styles.bottomControls}></div>
+                <div className={styles.leftControls}></div>
                 <div className={styles.bottomControls}>
                     <div className={styles.sliderWrapper}>
-                        <SwipeGroup
-                            slices={slices}
-                            onChange={handleSwipeLayerNumberChange}
-                        />
                         <DateSlider
                             onChange={handleDateChange}
                             slices={slices}
                         />
+                        {
+                            showLayerDiff
+                                ? (
+                                    <DateSlider
+                                        onChange={handleSwipeLayerNumberChange}
+                                        slices={slices}
+                                    />
+                                ) : null
+
+                        }
                     </div>
                 </div>
                 <div className={styles.rightControls}>
