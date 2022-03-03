@@ -11,7 +11,6 @@ import 'ol-ext/dist/ol-ext.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
-import { SwipeGroup } from 'components/swipe-group';
 import styles from './styles.scss';
 import { mapService } from './map-service';
 
@@ -39,37 +38,70 @@ export const MapComponent = (props: MapComponentProps) => {
         });
     }, []);
 
-    const handleDateChange = (value: number) => {
+    const clearControls = () => {
+        map.getControls().forEach(control => map.removeControl(control));
+        swipeControl.removeLayers();
         layerGroups.forEach(group => group.setVisible(false));
-        layerGroups[value].setVisible(true);
-        setSliderLayerNumber(value);
+    };
+
+    const handleDateChange = (value: number) => {
+        if (!showLayerDiff) {
+            layerGroups.forEach(group => group.setVisible(false));
+            layerGroups[value].setVisible(true);
+            setSliderLayerNumber(value);
+        } else {
+            clearControls();
+
+            map.addControl(swipeControl);
+            layerGroups[value].getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, false);
+            });
+            layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, true);
+            });
+            layerGroups[swipeLayerNumber].setVisible(true);
+            layerGroups[value].setVisible(true);
+
+            setSliderLayerNumber(value);
+        }
     };
 
     const handleSwipeLayerNumberChange = (value: number) => {
+        clearControls();
+        map.addControl(swipeControl);
+        layerGroups[value].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, true);
+        });
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, false);
+        });
+        layerGroups[sliderLayerNumber].setVisible(true);
+        layerGroups[value].setVisible(true);
+
         setSwipeLayerNumber(value);
     };
 
     const showDiff = () => {
         map.addControl(swipeControl);
-
-        // layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-        //     swipeControl.addLayer(layer, false);
-        // });
-
-        // layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
-        //     swipeControl.addLayer(layer, true);
-        // });
-
-        // layerGroups[swipeLayerNumber].setVisible(true);
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, false);
+        });
+        layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, true);
+        });
+        layerGroups[swipeLayerNumber].setVisible(true);
 
         setShowLayerDiff(true);
     };
 
     const hideDiff = () => {
         swipeControl.removeLayers();
-        map.getControls().forEach(control => map.removeControl(control));
-        handleDateChange(sliderLayerNumber);
-
+        map.getControls().forEach(control => {
+            map.removeControl(control);
+        });
+        layerGroups.forEach(group => group.setVisible(false));
+        layerGroups[sliderLayerNumber].setVisible(true);
+        setSliderLayerNumber(sliderLayerNumber);
         setShowLayerDiff(false);
     };
 
