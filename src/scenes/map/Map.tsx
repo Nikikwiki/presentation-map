@@ -131,7 +131,7 @@ export const MapComponent = (props: MapComponentProps) => {
                             ? (
                                 <button
                                     type='button'
-                                    className={styles.diffControlsButton}
+                                    className={styles.controlButton}
                                     onClick={() => hideDiff()}
                                 >
                                     Сравнить
@@ -140,7 +140,7 @@ export const MapComponent = (props: MapComponentProps) => {
                             : (
                                 <button
                                     type='button'
-                                    className={styles.diffControlsButton}
+                                    className={styles.controlButton}
                                     onClick={() => showDiff()}
                                 >
                                     Сравнить
@@ -153,7 +153,7 @@ export const MapComponent = (props: MapComponentProps) => {
                         <button
                             type="button"
                             title='Zoom in'
-                            className='zoom-controls__button'
+                            className='zoom-controls__button controlButton top'
                             onClick={() => {
                                 const zoom = map.getView().getZoom();
                                 if (zoom !== undefined) {
@@ -169,7 +169,7 @@ export const MapComponent = (props: MapComponentProps) => {
                         <button
                             type="button"
                             title='Zoom out'
-                            className='zoom-controls__button'
+                            className='zoom-controls__button controlButton bottom'
                             onClick={() => {
                                 const zoom = map.getView().getZoom();
                                 if (zoom !== undefined) {
