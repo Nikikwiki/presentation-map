@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ProSidebar, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
+import { Icons } from 'components/icons';
 import styles from './styles.scss';
 
 export const Sidebar = (props: any) => {
@@ -25,10 +26,8 @@ export const Sidebar = (props: any) => {
                 if (typeof (value) === 'string') {
                     return (
                         <div key={i.toString()} className={styles.contentBlock}>
-                            <span className={styles.contentTitle}>{key}</span>
-                            :
-                            {' '}
-                            {value}
+                            <div className={styles.contentTitle}>{key}</div>
+                            <div className={styles.contentStyle}>{value}</div>
                         </div>
                     );
                 } else {
@@ -48,22 +47,22 @@ export const Sidebar = (props: any) => {
                 collapsedWidth='0px'
             >
                 <SidebarHeader className={styles.header}>
-                    {feature?.mr}
+                    <p className={styles.headerText}>
+                        {feature?.mr}
+                    </p>
+                    <button
+                        className={styles.headerButton}
+                        type='button'
+                        onClick={() => hideSidebar()}
+                    >
+                        <Icons.IconClose className={styles.icon} />
+                    </button>
                 </SidebarHeader>
-                <SidebarContent className={styles.content}>
+                <SidebarContent>
                     {
                         renderContent()
                     }
                 </SidebarContent>
-                <SidebarFooter className={styles.footer}>
-                    <button
-                        type='button'
-                        className={styles.footerButton}
-                        onClick={() => hideSidebar()}
-                    >
-                        Свернуть
-                    </button>
-                </SidebarFooter>
             </ProSidebar>
         </div>
     );
