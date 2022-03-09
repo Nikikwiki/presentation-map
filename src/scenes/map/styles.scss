@@ -119,16 +119,16 @@
 
     &:hover {
         background: linear-gradient(180deg, #1F8CEB 0%, #3758FF 100%);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2) !important;
     }
 
     &:active {
-        background: linear-gradient(180deg, #1F8CEB 0%, #3758FF 100%);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+        background-color: #3758FF !important;
+        box-shadow: none !important;
     }
 
     &:focus {
-        background: #3758FF;
+        background-color: #3758FF;
         box-shadow: none;
     }
 

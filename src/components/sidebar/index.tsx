@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ProSidebar, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
+import { ProSidebar, SidebarHeader, SidebarContent } from 'react-pro-sidebar';
 import { Icons } from 'components/icons';
 import styles from './styles.scss';
 
 export const Sidebar = (props: any) => {
     const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
 
-    const { feature } = props;
+    const { feature, onClose } = props;
 
     useEffect(() => {
         if (feature) {
@@ -14,10 +14,11 @@ export const Sidebar = (props: any) => {
         } else {
             setSidebarCollapse(true);
         }
-    }, [ feature ]);
+    });
 
     const hideSidebar = () => {
         setSidebarCollapse(true);
+        onClose();
     };
 
     const renderContent = () => {

@@ -204,7 +204,12 @@ export const MapComponent = (props: MapComponentProps) => {
                     </div>
                 </div>
             </div>
-            <Sidebar feature={clickedFeature?.getProperties()} />
+            <Sidebar
+                feature={clickedFeature?.getProperties()}
+                onClose={() => {
+                    setClickedFeature(null);
+                }}
+            />
         </div>
     );
 };
