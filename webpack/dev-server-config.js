@@ -28,25 +28,6 @@ module.exports = () => webpackConfig => {
             port: config.DEV_SERVER_PORT,
             historyApiFallback: true,
             static: config.CONTENT_PATH,
-            proxy: {
-                ...makeProxyConfig(
-                    '/external-services',
-                    path.join(config.OMS_PATH, '/external-services'),
-                    `${config.OMS_PROTOCOL}://${config.OMS_HOST}`,
-                    {
-                        bypass: setCookie
-                    }
-                ),
-                ...makeProxyConfig(
-                    '/container/2.0',
-                    path.join(config.OMS_PATH, '/container/2.0'),
-                    `${config.OMS_PROTOCOL}://${config.OMS_HOST}`,
-                    {
-                        bypass: setCookie
-                    }
-                )
-
-            }
         }
     });
 
