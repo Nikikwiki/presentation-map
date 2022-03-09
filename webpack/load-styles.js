@@ -22,8 +22,6 @@ module.exports = () => webpackConfig => {
             loader: 'css-loader',
             options: {
                 modules: {
-                    // localIdentName: '[local]--[hash:base64:5]'
-                    // localIdentName: '[path][name]__[local]',
                     localIdentName: '[local]',
                     exportLocalsConvention: 'camelCaseOnly',
                     exportGlobals: false
@@ -72,7 +70,6 @@ module.exports = () => webpackConfig => {
             use: [
                 {
                     loader: MiniCssExtractPlugin.loader
-                    // options: { publicPath: '../server/static/images' }
                 },
                 {
                     loader: 'css-loader'

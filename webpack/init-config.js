@@ -19,7 +19,6 @@ module.exports = ({ entry, context, alias }) => webpackConfig => {
         output: {
             publicPath: '',
             path: config.DIST_PATH,
-            // filename: `${config.BUILD_NAME}.js`
             filename: '[name].js',
             chunkFilename: '[id].[chunkhash].js'
         },

@@ -1,24 +1,4 @@
 const config = require('../config');
-const path = require('path');
-
-const makeProxyConfig = (path, rewriteTo, target, extra = {}) => ({
-    [path]: {
-        target: target,
-        changeOrigin: true,
-        logLevel: "debug",
-        pathRewrite: {
-            [`^${path}`]: rewriteTo
-        },
-        secure: false,
-        ...extra
-    }
-});
-
-const proxyCookies = {};
-
-const setCookie = (req) => {
-    req.headers.cookie = proxyCookies.cookie;
-}
 
 module.exports = () => webpackConfig => {
     Object.assign(webpackConfig, {
