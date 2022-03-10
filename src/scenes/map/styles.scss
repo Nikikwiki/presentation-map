@@ -131,5 +131,42 @@
         background-color: #3758FF;
         box-shadow: none;
     }
+}
 
+.ol-swipe {
+    &::before {
+        box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
+    }
+
+    button {
+        cursor: col-resize;
+        height: 40px;
+        width: 20px;
+        margin: 0;
+        padding: 0;
+        border-radius: 20px;
+        background-color: #f4f4f4;
+        box-shadow: 0 0 10px 0 rgb(0 0 0 / 13%);
+    }
+}
+
+.ol-swipe button:before, .ol-swipe button:after, .ol-swipe:after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 10px;
+    top: 40%;
+    background-color: #7e7e7e;
+}
+
+.ol-swipe button:before {
+    left: 67%;
+}
+
+.ol-swipe button:after {
+    left: 37%;
+}
+
+.ol-swipe:after {
+    left: 52%;
 }
