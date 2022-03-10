@@ -2,6 +2,7 @@ import Slider, { SliderTooltip } from 'rc-slider';
 import React, { useState } from 'react';
 import { Slice } from 'types';
 import 'react-pro-sidebar/dist/css/styles.css';
+import moment from 'moment';
 import styles from './styles.scss';
 
 interface DateSliderProps {
@@ -16,7 +17,7 @@ export const DateSlider = (props: DateSliderProps) => {
     const [ layerDate, setLayerDate ] = useState(0);
 
     const marks = Object.fromEntries(slices.map((slice, i) => {
-        return [ i, <span className={styles.sliderSpan}>{slice.date.slice(0, 4)}</span> ];
+        return [ i, <div className={styles.sliderSpan}>{moment(slice.date).format('YYYY')}</div> ];
     }));
 
     const handleChange = (value: number) => {
@@ -32,7 +33,7 @@ export const DateSlider = (props: DateSliderProps) => {
         return (
             <SliderTooltip
                 prefixCls="rc-slider-tooltip"
-                overlay={`${currentDate.slice(0, 10)}`}
+                overlay={moment(currentDate).format('DD.MM.YYYY')}
                 visible={dragging}
                 placement="top"
                 key={index}

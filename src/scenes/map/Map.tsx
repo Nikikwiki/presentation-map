@@ -44,14 +44,13 @@ export const MapComponent = (props: MapComponentProps) => {
         layerGroups.forEach(group => group.setVisible(false));
     };
 
-    const handleDateChange = (value: number) => {
+    const handleLeftLayerChange = (value: number) => {
         if (!showLayerDiff) {
             layerGroups.forEach(group => group.setVisible(false));
             layerGroups[value].setVisible(true);
             setSliderLayerNumber(value);
         } else {
             clearControls();
-
             map.addControl(swipeControl);
             layerGroups[value].getLayersArray().forEach(layer => {
                 swipeControl.addLayer(layer, false);
@@ -66,7 +65,7 @@ export const MapComponent = (props: MapComponentProps) => {
         }
     };
 
-    const handleSwipeLayerNumberChange = (value: number) => {
+    const handleRightLayerChange = (value: number) => {
         clearControls();
         map.addControl(swipeControl);
         layerGroups[value].getLayersArray().forEach(layer => {
@@ -126,27 +125,14 @@ export const MapComponent = (props: MapComponentProps) => {
             <div className={styles.map} ref={mapRef}></div>
             <div className={styles.controls}>
                 <div className={styles.topControls}>
-                    {
-                        showLayerDiff
-                            ? (
-                                <button
-                                    type='button'
-                                    className={styles.controlButton}
-                                    onClick={() => hideDiff()}
-                                >
-                                    Сравнить
-                                </button>
-                            )
-                            : (
-                                <button
-                                    type='button'
-                                    className={styles.controlButton}
-                                    onClick={() => showDiff()}
-                                >
-                                    Сравнить
-                                </button>
-                            )
-                    }
+                    <button
+                        type='button'
+                        className={styles.controlButton}
+                        onClick={() =>
+                            (showLayerDiff ? hideDiff() : showDiff())}
+                    >
+                        Сравнить
+                    </button>
                 </div>
                 <div className={styles.midControls}>
                     <div className={styles.zoomControls}>
@@ -188,14 +174,14 @@ export const MapComponent = (props: MapComponentProps) => {
                 <div className={styles.bottomControls}>
                     <div className={styles.sliderWrapper}>
                         <DateSlider
-                            onChange={handleDateChange}
+                            onChange={handleLeftLayerChange}
                             slices={slices}
                         />
                         {
                             showLayerDiff
                                 ? (
                                     <DateSlider
-                                        onChange={handleSwipeLayerNumberChange}
+                                        onChange={handleRightLayerChange}
                                         slices={slices}
                                     />
                                 ) : null

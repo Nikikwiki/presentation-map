@@ -1,7 +1,7 @@
 {
     "center": [0,0],
-    "zoom": 3,
-    "minZoom": 6,
+    "zoom": 2,
+    "minZoom": 4,
     "maxZoom": 20,
     "extent": [
         3975211.0536368806, 7222898.848739378, 
