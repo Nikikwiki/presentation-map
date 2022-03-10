@@ -52,15 +52,18 @@ export const MapComponent = (props: MapComponentProps) => {
         } else {
             clearControls();
             map.addControl(swipeControl);
-            layerGroups[value].getLayersArray().forEach(layer => {
-                swipeControl.addLayer(layer, false);
-            });
-            layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
-                swipeControl.addLayer(layer, true);
-            });
-            layerGroups[swipeLayerNumber].setVisible(true);
-            layerGroups[value].setVisible(true);
-
+            if (swipeLayerNumber !== value) {
+                layerGroups[value].getLayersArray().forEach(layer => {
+                    swipeControl.addLayer(layer, false);
+                });
+                layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
+                    swipeControl.addLayer(layer, true);
+                });
+                layerGroups[swipeLayerNumber].setVisible(true);
+                layerGroups[value].setVisible(true);
+            } else {
+                layerGroups[value].setVisible(true);
+            }
             setSliderLayerNumber(value);
         }
     };
@@ -68,28 +71,38 @@ export const MapComponent = (props: MapComponentProps) => {
     const handleRightLayerChange = (value: number) => {
         clearControls();
         map.addControl(swipeControl);
-        layerGroups[value].getLayersArray().forEach(layer => {
-            swipeControl.addLayer(layer, true);
-        });
-        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-            swipeControl.addLayer(layer, false);
-        });
-        layerGroups[sliderLayerNumber].setVisible(true);
-        layerGroups[value].setVisible(true);
+        if (value !== sliderLayerNumber) {
+            layerGroups[value].getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, true);
+            });
+            layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, false);
+            });
+            layerGroups[sliderLayerNumber].setVisible(true);
+            layerGroups[value].setVisible(true);
+        } else {
+            layerGroups[value].setVisible(true);
+        }
 
         setSwipeLayerNumber(value);
     };
 
     const showDiff = () => {
-        map.addControl(swipeControl);
-        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-            swipeControl.addLayer(layer, false);
-        });
-        layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
-            swipeControl.addLayer(layer, true);
-        });
-        layerGroups[swipeLayerNumber].setVisible(true);
+        layerGroups.forEach(group => group.setVisible(false));
+        if (sliderLayerNumber !== swipeLayerNumber) {
+            layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, false);
+            });
+            layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, true);
+            });
+            layerGroups[sliderLayerNumber].setVisible(true);
+            layerGroups[swipeLayerNumber].setVisible(true);
+        } else {
+            layerGroups[sliderLayerNumber].setVisible(true);
+        }
 
+        map.addControl(swipeControl);
         setShowLayerDiff(true);
     };
 
@@ -100,7 +113,7 @@ export const MapComponent = (props: MapComponentProps) => {
         });
         layerGroups.forEach(group => group.setVisible(false));
         layerGroups[sliderLayerNumber].setVisible(true);
-        setSliderLayerNumber(sliderLayerNumber);
+        setSwipeLayerNumber(0);
         setShowLayerDiff(false);
     };
 
