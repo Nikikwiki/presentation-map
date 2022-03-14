@@ -11,8 +11,15 @@ import 'ol-ext/dist/ol-ext.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
-import styles from './styles.scss';
+import { Layer, Group } from 'ol/layer';
+import { OSM, XYZ } from 'ol/source';
+import TileLayer from 'ol/layer/Tile';
+import GeoJSON from 'geojson';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import { Style } from 'ol/style';
 import { mapService } from './map-service';
+import styles from './styles.scss';
 
 interface MapComponentProps {
     mapConfig: MapConfig;
@@ -44,6 +51,34 @@ export const MapComponent = (props: MapComponentProps) => {
         layerGroups.forEach(group => group.setVisible(false));
     };
 
+    const copyLayerGroup = (layerGr: Group): Group => {
+        const lCollection = layerGr.getLayersArray().map(layer => {
+            let l: any = {};
+            if (layer instanceof TileLayer) {
+                l = new TileLayer({
+                    source: new XYZ({
+                        url: layer.getSource().url
+                    })
+                });
+            } else if (layer instanceof VectorLayer) {
+                l = new VectorLayer({
+                    source: new VectorSource({
+                        features: layer.getSource().getFeatures()
+                    }),
+                    style: layer.getStyle()
+                });
+            }
+            return l;
+        });
+
+        const lGroup = new Group({
+            layers: [ ...lCollection ],
+            visible: true
+        });
+
+        return lGroup;
+    };
+
     const handleLeftLayerChange = (value: number) => {
         if (!showLayerDiff) {
             layerGroups.forEach(group => group.setVisible(false));
@@ -69,37 +104,51 @@ export const MapComponent = (props: MapComponentProps) => {
     };
 
     const handleRightLayerChange = (value: number) => {
-        clearControls();
-        map.addControl(swipeControl);
-        if (value !== sliderLayerNumber) {
+        layerGroups.forEach(group => group.setVisible(false));
+        layerGroups.forEach(group => map.removeLayer(group));
+        swipeControl.removeLayers(swipeControl.layers.map((swl: any) => swl.layer));
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, false);
+        });
+        if (value === sliderLayerNumber) {
+            const lGroup = copyLayerGroup(layerGroups[sliderLayerNumber]);
+            map.addLayer(lGroup);
+            lGroup.getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, true);
+            });
+        } else {
+            map.addLayer(layerGroups[value]);
             layerGroups[value].getLayersArray().forEach(layer => {
                 swipeControl.addLayer(layer, true);
             });
-            layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-                swipeControl.addLayer(layer, false);
-            });
-            layerGroups[sliderLayerNumber].setVisible(true);
-            layerGroups[value].setVisible(true);
-        } else {
             layerGroups[value].setVisible(true);
         }
-
+        map.addLayer(layerGroups[sliderLayerNumber]);
+        layerGroups[sliderLayerNumber].setVisible(true);
         setSwipeLayerNumber(value);
     };
 
     const showDiff = () => {
-        layerGroups.forEach(group => group.setVisible(false));
-        if (sliderLayerNumber !== swipeLayerNumber) {
-            layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-                swipeControl.addLayer(layer, false);
+        layerGroups.forEach(group => map.removeLayer(group));
+        swipeControl.removeLayers(swipeControl.layers.map((swl: any) => swl.layer));
+        map.addLayer(layerGroups[sliderLayerNumber]);
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+            swipeControl.addLayer(layer, false);
+        });
+        if (swipeLayerNumber === sliderLayerNumber) {
+            const lGroup = copyLayerGroup(layerGroups[sliderLayerNumber]);
+            map.addLayer(lGroup);
+            lGroup.getLayersArray().forEach(layer => {
+                swipeControl.addLayer(layer, true);
             });
+            console.log(layerGroups);
+            setLayerGroups([ ...layerGroups, lGroup ]);
+        } else {
+            map.addLayer(layerGroups[swipeLayerNumber]);
             layerGroups[swipeLayerNumber].getLayersArray().forEach(layer => {
                 swipeControl.addLayer(layer, true);
             });
-            layerGroups[sliderLayerNumber].setVisible(true);
             layerGroups[swipeLayerNumber].setVisible(true);
-        } else {
-            layerGroups[sliderLayerNumber].setVisible(true);
         }
 
         map.addControl(swipeControl);
@@ -107,10 +156,12 @@ export const MapComponent = (props: MapComponentProps) => {
     };
 
     const hideDiff = () => {
+        layerGroups.forEach(group => map.removeLayer(group));
         swipeControl.removeLayers();
         map.getControls().forEach(control => {
             map.removeControl(control);
         });
+        layerGroups.forEach(group => map.addLayer(group));
         layerGroups.forEach(group => group.setVisible(false));
         layerGroups[sliderLayerNumber].setVisible(true);
         setSwipeLayerNumber(0);
