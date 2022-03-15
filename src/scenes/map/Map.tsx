@@ -46,9 +46,9 @@ export const MapComponent = (props: MapComponentProps) => {
             layerGroups[value].setVisible(true);
         } else {
             swipeControl.removeLayers(swipeControl.layers.map((swl: any) => swl.layer));
+            layerGroups[value].getLayersArray().forEach(layer => swipeControl.addLayer(layer, false));
             copyLayerGroups[swipeLayerNumber].getLayersArray().forEach(layer => swipeControl.addLayer(layer, true));
             layerGroups[value].setVisible(true);
-            layerGroups[value].getLayersArray().forEach(layer => swipeControl.addLayer(layer, false));
         }
 
         setSliderLayerNumber(value);
@@ -57,8 +57,8 @@ export const MapComponent = (props: MapComponentProps) => {
     const handleRightLayerChange = (value: number) => {
         copyLayerGroups.forEach(group => group.setVisible(false));
         swipeControl.removeLayers(swipeControl.layers.map((swl: any) => swl.layer));
-        copyLayerGroups[value].getLayersArray().forEach(layer => swipeControl.addLayer(layer, true));
         layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => swipeControl.addLayer(layer, false));
+        copyLayerGroups[value].getLayersArray().forEach(layer => swipeControl.addLayer(layer, true));
         copyLayerGroups[value].setVisible(true);
 
         setSwipeLayerNumber(value);
@@ -74,7 +74,6 @@ export const MapComponent = (props: MapComponentProps) => {
     };
 
     const hideDiff = () => {
-        copyLayerGroups.forEach(group => map.removeLayer(group));
         layerGroups.forEach(group => group.setVisible(false));
         copyLayerGroups.forEach(group => group.setVisible(false));
         layerGroups[sliderLayerNumber].setVisible(true);
