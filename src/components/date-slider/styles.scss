@@ -1,5 +1,6 @@
 .slider {
     pointer-events: all;
+    cursor: pointer;
 
     .sliderSpan {
         font-size: 14px;
@@ -44,4 +45,6 @@
     border-radius: 7px;
     background-color: #fff;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    pointer-events: all;
 }

@@ -1,5 +1,5 @@
 import Slider, { SliderTooltip } from 'rc-slider';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Slice } from 'types';
 import 'react-pro-sidebar/dist/css/styles.css';
 import moment from 'moment';
@@ -13,6 +13,7 @@ interface DateSliderProps {
 export const DateSlider = (props: DateSliderProps) => {
     const { slices, onChange } = props;
     const { Handle } = Slider;
+    const sliderRef = useRef<any>();
 
     const [ layerDate, setLayerDate ] = useState(0);
 
@@ -43,8 +44,45 @@ export const DateSlider = (props: DateSliderProps) => {
         );
     };
 
+    const selectClosestMark = (e: React.MouseEvent<HTMLElement>) => {
+        const clickedArea = e.clientX;
+        const markElementsArray = e.currentTarget.children[0]
+            .getElementsByClassName('rc-slider-mark')[0]
+            .getElementsByClassName('rc-slider-mark-text');
+
+        let middlesArray = [];
+
+        for (const elemMark of markElementsArray) {
+            const { x, width } = elemMark.getBoundingClientRect();
+            const middle = x + (width / 2);
+            middlesArray.push(middle);
+        }
+
+        let closestElement = 0;
+        if (clickedArea < middlesArray[0]) {
+            handleChange(0);
+        } else if (clickedArea < middlesArray[middlesArray.length]) {
+            handleChange(middlesArray.length - 1);
+        } else {
+            let diff = Math.abs(middlesArray[0] - clickedArea);
+            middlesArray.forEach((value, i) => {
+                if (Math.abs(value - clickedArea) < diff) {
+                    diff = Math.abs(value - clickedArea);
+                    closestElement = i;
+                }
+            });
+            handleChange(closestElement);
+        }
+    };
+
     return (
-        <div className={styles.wrapperSlider}>
+        <div
+            className={styles.wrapperSlider}
+            onClick={(e: React.MouseEvent<HTMLElement>) => selectClosestMark(e)}
+            onKeyPress={() => {}}
+            role="button"
+            tabIndex={0}
+        >
             <Slider
                 dots
                 min={0}
@@ -54,6 +92,7 @@ export const DateSlider = (props: DateSliderProps) => {
                 handle={handle}
                 className={styles.slider}
                 marks={marks}
+                ref={sliderRef}
             />
         </div>
     );
