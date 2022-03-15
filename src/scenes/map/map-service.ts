@@ -18,6 +18,7 @@ class MapService {
     public async generateMap(mapConfig: MapConfig, slices: Slice[], mapRef:any): Promise<{
         map: OlMap,
         groups: LayerGroup[]
+        groupsCopy: LayerGroup[],
     }> {
         const map = new OlMap({
             target: mapRef.current,
@@ -47,6 +48,7 @@ class MapService {
         });
 
         const groups = await Promise.resolve(this.createMapGroups(slices));
+        const groupsCopy = await Promise.resolve(this.createMapGroups(slices));
 
         groups.forEach((group, i) => {
             if (i === 0) {
@@ -55,8 +57,10 @@ class MapService {
             map.addLayer(group);
         });
 
+        groupsCopy.forEach(group => map.addLayer(group));
+
         const mapGroups = {
-            map, groups
+            map, groups, groupsCopy
         };
 
         return mapGroups;
