@@ -48,7 +48,7 @@ class MapService {
         });
 
         const groups = await Promise.resolve(this.createMapGroups(slices));
-        const groupsCopy = await Promise.resolve(this.createMapGroups(slices));
+        const groupsCopy = this.copyLayerGroup(groups);
 
         groups.forEach((group, i) => {
             if (i === 0) {
@@ -56,8 +56,10 @@ class MapService {
             }
             map.addLayer(group);
         });
-
-        groupsCopy.forEach(group => map.addLayer(group));
+        groupsCopy.forEach(group => {
+            group.setVisible(false);
+            map.addLayer(group);
+        });
 
         const mapGroups = {
             map, groups, groupsCopy
@@ -151,6 +153,36 @@ class MapService {
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
+    }
+
+    private copyLayerGroup(layerGroups: LayerGroup[]): LayerGroup[] {
+        const copyLayerGroups = layerGroups.map(layerGr => {
+            const lCollection = layerGr.getLayersArray().map(layer => {
+                let l: any = {};
+                if (layer instanceof TileLayer) {
+                    l = new TileLayer({
+                        source: new XYZ({
+                            url: layer.getSource().url
+                        })
+                    });
+                } else if (layer instanceof VectorLayer) {
+                    l = new VectorLayer({
+                        source: new VectorSource({
+                            features: layer.getSource().getFeatures()
+                        }),
+                        style: layer.getStyle()
+                    });
+                }
+                return l;
+            });
+
+            return new LayerGroup({
+                layers: [ ...lCollection ],
+                visible: true
+            });
+        });
+
+        return copyLayerGroups;
     }
 }
 export const mapService = new MapService();
