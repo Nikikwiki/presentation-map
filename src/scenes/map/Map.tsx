@@ -30,7 +30,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
 
-    const swipeControl = new Swipe();
+    const swipeControl = useRef(new Swipe());
 
     useEffect(() => {
         mapService.generateMap(mapConfig, slices, mapRef).then(res => {
@@ -45,13 +45,10 @@ export const MapComponent = (props: MapComponentProps) => {
         if (!showLayerDiff) {
             layerGroups[value].setVisible(true);
         } else {
-            map.getControls().getArray().forEach((control: any) => {
-                if (control instanceof Swipe) {
-                    control.removeLayers(control.layers.map((swl: any) => swl.layer));
-                    layerGroups[value].getLayersArray().forEach(layer => control.addLayer(layer, false));
-                    copyLayerGroups[swipeLayerNumber].getLayersArray().forEach(layer => control.addLayer(layer, true));
-                }
-            });
+            layerGroups[value].getLayersArray()
+                .forEach(layer => swipeControl.current.addLayer(layer, false));
+            copyLayerGroups[swipeLayerNumber].getLayersArray()
+                .forEach(layer => swipeControl.current.addLayer(layer, true));
             layerGroups[value].setVisible(true);
         }
         setSliderLayerNumber(value);
@@ -59,27 +56,19 @@ export const MapComponent = (props: MapComponentProps) => {
 
     const handleRightLayerChange = (value: number) => {
         copyLayerGroups.forEach(group => group.setVisible(false));
-        map.getControls().getArray().forEach((control: any) => {
-            if (control instanceof Swipe) {
-                control.removeLayers(control.layers.map((swl: any) => swl.layer));
-                layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => control.addLayer(layer, false));
-                copyLayerGroups[value].getLayersArray().forEach(layer => control.addLayer(layer, true));
-            }
-        });
+
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, false));
+        copyLayerGroups[value].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, true));
         copyLayerGroups[value].setVisible(true);
         setSwipeLayerNumber(value);
     };
 
     const showDiff = () => {
         copyLayerGroups[swipeLayerNumber].setVisible(true);
-        map.addControl(swipeControl);
+        map.addControl(swipeControl.current);
 
-        map.getControls().getArray().forEach((control: any) => {
-            if (control instanceof Swipe) {
-                layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => control.addLayer(layer, false));
-                copyLayerGroups[swipeLayerNumber].getLayersArray().forEach(layer => control.addLayer(layer, true));
-            }
-        });
+        layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, false));
+        copyLayerGroups[swipeLayerNumber].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, true));
         setShowLayerDiff(true);
     };
 
