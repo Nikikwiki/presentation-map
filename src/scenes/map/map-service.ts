@@ -47,7 +47,7 @@ class MapService {
             ])
         });
 
-        const groups = await Promise.resolve(this.createMapGroups(slices));
+        const groups = await this.createMapGroups(slices);
         const groupsCopy = this.copyLayerGroup(groups);
 
         groups.forEach((group, i) => {
@@ -68,68 +68,62 @@ class MapService {
         return mapGroups;
     }
 
-    private async createMapGroups(slices: Slice[]): Promise<LayerGroup[]> {
-        const layerGroups = await Promise.all(
-            slices.map(async slice => {
-                const vectorTypedLayers = slice.layers.filter((layer: Layer) => {
-                    if (layer.type === 'vector') {
-                        return layer;
-                    } else return null;
-                });
+    private async createMapGroups(slices: Slice[]) {
+        let groups: LayerGroup[] = [];
 
-                const tileTypedLayers = slice.layers.filter((layer: Layer) => {
-                    if (layer.type === 'tile') {
-                        return layer;
-                    } else return null;
-                });
+        for (let slice of slices) {
+            const vectorTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'vector');
 
-                return Promise.all(
-                    vectorTypedLayers.map(async (layer) => {
-                        const layerByUrl = await this.getLayer(layer.url);
-                        return layerByUrl.data;
+            const tileTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'tile');
+
+            const vectorLayerArray = [];
+
+            for (let layer of vectorTypedLayers) {
+                // eslint-disable-next-line no-await-in-loop
+                const { data: layerByUrl } = await this.getLayer(layer.url);
+                vectorLayerArray.push(layerByUrl);
+            }
+
+            const vectorLayers = [];
+
+            for (let layer of vectorLayerArray) {
+                const a = new VectorLayer({
+                    source: new VectorSource({
+                        features: new GeoJSON().readFeatures(layer, {
+                            dataProjection: 'EPSG:4326',
+                            featureProjection: 'EPSG:3857'
+                        })
+                    }),
+                    style: new Style({
+                        image: this.generateCircleStyle()
                     })
-                ).then(featuresArray => {
-                    const vectorLayers = featuresArray.map(layer => {
-                        return (
-                            new VectorLayer({
-                                source: new VectorSource({
-                                    features: new GeoJSON().readFeatures(layer, {
-                                        dataProjection: 'EPSG:4326',
-                                        featureProjection: 'EPSG:3857'
-                                    })
-                                }),
-                                style: new Style({
-                                    image: this.generateCircleStyle()
-                                })
-                            })
-                        );
-                    });
-
-                    const tileLayers = tileTypedLayers.map(layer => {
-                        return (
-                            new TileLayer({
-                                source: new XYZ({
-                                    url: layer.url
-                                })
-                            })
-                        );
-                    });
-
-                    const group = new LayerGroup({
-                        layers: [
-                            ...tileLayers,
-                            ...vectorLayers
-                        ],
-                        visible: false
-                    });
-                    return group;
                 });
-            })
-        ).then(res => {
-            return res;
-        });
+                vectorLayers.push(a);
+            }
 
-        return layerGroups;
+            const tileLayers = [];
+
+            for (let layer of tileTypedLayers) {
+                const a = new TileLayer({
+                    source: new XYZ({
+                        url: layer.url
+                    })
+                });
+                tileLayers.push(a);
+            }
+
+            const group = new LayerGroup({
+                layers: [
+                    ...tileLayers,
+                    ...vectorLayers
+                ],
+                visible: false
+            });
+
+            groups.push(group);
+        }
+
+        return groups;
     }
 
     private async getLayer(url: string): Promise<AxiosResponse<any>> {
@@ -162,7 +156,7 @@ class MapService {
                 if (layer instanceof TileLayer) {
                     l = new TileLayer({
                         source: new XYZ({
-                            url: layer.getSource().url
+                            url: layer.getSource().getUrls()[0]
                         })
                     });
                 } else if (layer instanceof VectorLayer) {
