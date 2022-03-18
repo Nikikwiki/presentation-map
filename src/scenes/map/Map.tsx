@@ -11,6 +11,7 @@ import 'ol-ext/dist/ol-ext.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
+import { UTFGrid } from 'ol/source';
 import { mapService } from './map-service';
 import styles from './styles.scss';
 
@@ -83,6 +84,24 @@ export const MapComponent = (props: MapComponentProps) => {
         setShowLayerDiff(false);
     };
 
+    const displayInfo = (e: any) => {
+        const coordinate = map.getEventCoordinate(e.originalEvent);
+        const resolution = map.getView().getResolution();
+        if (layerGroups[sliderLayerNumber]) {
+            layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
+                if (layer.getSource() instanceof UTFGrid) {
+                    layer.getSource().forDataAtCoordinateAndResolution(
+                        coordinate,
+                        resolution,
+                        (data: any) => {
+                            console.log(data);
+                        }
+                    );
+                }
+            });
+        }
+    };
+
     map.on('click', (e) => {
         const feature = map.forEachFeatureAtPixel(e.pixel, (f, _) => {
             return f;
@@ -92,6 +111,8 @@ export const MapComponent = (props: MapComponentProps) => {
         } else {
             setClickedFeature(null);
         }
+
+        displayInfo(e);
     });
 
     map.on('pointermove', (e) => {

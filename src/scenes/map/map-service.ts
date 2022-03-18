@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Layer, Slice, MapConfig } from 'types';
 import { Group as LayerGroup, Tile as TileLayer } from 'ol/layer';
 import VectorLayer from 'ol/layer/Vector';
-import { OSM } from 'ol/source';
+import { OSM, UTFGrid } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Fill, Stroke, Style } from 'ol/style';
@@ -76,17 +76,19 @@ class MapService {
 
             const tileTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'tile');
 
-            const vectorLayerArray = [];
+            const gridTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'grid');
+
+            const rawFeaturesCollection = [];
 
             for (let layer of vectorTypedLayers) {
                 // eslint-disable-next-line no-await-in-loop
                 const { data: layerByUrl } = await this.getLayer(layer.url);
-                vectorLayerArray.push(layerByUrl);
+                rawFeaturesCollection.push(layerByUrl);
             }
 
             const vectorLayers = [];
 
-            for (let layer of vectorLayerArray) {
+            for (let layer of rawFeaturesCollection) {
                 const a = new VectorLayer({
                     source: new VectorSource({
                         features: new GeoJSON().readFeatures(layer, {
@@ -112,9 +114,24 @@ class MapService {
                 tileLayers.push(a);
             }
 
+            const gridLayers = [];
+
+            for (let layer of gridTypedLayers) {
+                const a = new TileLayer({
+                    source: new UTFGrid({
+                        tileJSON: {
+                            tiles: [ layer.url ],
+                            grids: [ layer.url ]
+                        }
+                    })
+                });
+                gridLayers.push(a);
+            }
+
             const group = new LayerGroup({
                 layers: [
                     ...tileLayers,
+                    ...gridLayers,
                     ...vectorLayers
                 ],
                 visible: false
@@ -154,11 +171,17 @@ class MapService {
             const lCollection = layerGr.getLayersArray().map(layer => {
                 let l: any = {};
                 if (layer instanceof TileLayer) {
-                    l = new TileLayer({
-                        source: new XYZ({
-                            url: layer.getSource().getUrls()[0]
-                        })
-                    });
+                    if (layer.getSource() instanceof XYZ) {
+                        l = new TileLayer({
+                            source: new XYZ({
+                                url: layer.getSource().getUrls()[0]
+                            })
+                        });
+                    } else {
+                        l = new TileLayer({
+                            source: layer.getSource()
+                        });
+                    }
                 } else if (layer instanceof VectorLayer) {
                     l = new VectorLayer({
                         source: new VectorSource({
