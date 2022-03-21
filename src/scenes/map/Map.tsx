@@ -11,6 +11,7 @@ import 'ol-ext/dist/ol-ext.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { UTFGrid } from 'ol/source';
 import { mapService } from './map-service';
 import styles from './styles.scss';
@@ -41,11 +42,52 @@ export const MapComponent = (props: MapComponentProps) => {
         });
     }, []);
 
+    const displayInfo = (e: MapBrowserEvent<any>) => {
+        const coordinate = map.getEventCoordinate(e.originalEvent);
+        const resolution = map.getView().getResolution();
+        const clickedLayer = map.forEachLayerAtPixel(e.pixel, (l) => {
+            return l;
+        });
+
+        if (clickedLayer?.getSource() instanceof UTFGrid) {
+            clickedLayer?.getSource().forDataAtCoordinateAndResolution(
+                coordinate,
+                resolution,
+                (data: any) => {
+                    console.log('data - ', data);
+                    if (data !== null && data !== '') {
+                        setClickedFeature(data);
+                    }
+                }
+            );
+        }
+    };
+
+    useEffect(() => {
+        map.on('click', (e) => {
+            const feature = map.forEachFeatureAtPixel(e.pixel, (f, _) => {
+                return f;
+            });
+            if (feature) {
+                setClickedFeature(feature?.getProperties());
+            } else {
+                setClickedFeature(null);
+                displayInfo(e);
+            }
+        });
+
+        map.on('pointermove', (e) => {
+            const hit = map.hasFeatureAtPixel(e.pixel);
+            map.getTargetElement().style.cursor = (hit ? 'pointer' : '');
+        });
+    }, [ map ]);
+
     const handleLeftLayerChange = (value: number) => {
         layerGroups.forEach(group => group.setVisible(false));
         if (!showLayerDiff) {
             layerGroups[value].setVisible(true);
         } else {
+            swipeControl.current.removeLayers(swipeControl.current.layers.map((swl: any) => swl.layer));
             layerGroups[value].getLayersArray()
                 .forEach(layer => swipeControl.current.addLayer(layer, false));
             copyLayerGroups[swipeLayerNumber].getLayersArray()
@@ -56,6 +98,7 @@ export const MapComponent = (props: MapComponentProps) => {
     };
 
     const handleRightLayerChange = (value: number) => {
+        swipeControl.current.removeLayers(swipeControl.current.layers.map((swl: any) => swl.layer));
         copyLayerGroups.forEach(group => group.setVisible(false));
 
         layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, false));
@@ -83,42 +126,6 @@ export const MapComponent = (props: MapComponentProps) => {
         setSwipeLayerNumber(0);
         setShowLayerDiff(false);
     };
-
-    const displayInfo = (e: any) => {
-        const coordinate = map.getEventCoordinate(e.originalEvent);
-        const resolution = map.getView().getResolution();
-        if (layerGroups[sliderLayerNumber]) {
-            layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => {
-                if (layer.getSource() instanceof UTFGrid) {
-                    layer.getSource().forDataAtCoordinateAndResolution(
-                        coordinate,
-                        resolution,
-                        (data: any) => {
-                            console.log(data);
-                        }
-                    );
-                }
-            });
-        }
-    };
-
-    map.on('click', (e) => {
-        const feature = map.forEachFeatureAtPixel(e.pixel, (f, _) => {
-            return f;
-        });
-        if (feature) {
-            setClickedFeature(feature);
-        } else {
-            setClickedFeature(null);
-        }
-
-        displayInfo(e);
-    });
-
-    map.on('pointermove', (e) => {
-        let hit = map.hasFeatureAtPixel(e.pixel);
-        map.getTargetElement().style.cursor = (hit ? 'pointer' : '');
-    });
 
     return (
         <div className={styles.mapWrapper}>
@@ -191,7 +198,7 @@ export const MapComponent = (props: MapComponentProps) => {
                 </div>
             </div>
             <Sidebar
-                feature={clickedFeature?.getProperties()}
+                feature={clickedFeature}
                 onClose={() => {
                     setClickedFeature(null);
                 }}
