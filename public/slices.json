@@ -22,7 +22,7 @@
             
             {
                 "type": "grid",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489,4488,4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
             }
         ]
     },
@@ -81,7 +81,7 @@
             
             {
                 "type": "grid",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489,4488,4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
             }
         ]
     },
@@ -96,6 +96,14 @@
             {
                 "type": "tile",
                 "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+            },
+            {
+                "type": "tile",
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru"
+            },
+            {
+                "type": "grid",
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
             }
         ]
     }

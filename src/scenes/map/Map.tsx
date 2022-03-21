@@ -54,7 +54,6 @@ export const MapComponent = (props: MapComponentProps) => {
                 coordinate,
                 resolution,
                 (data: any) => {
-                    console.log('data - ', data);
                     if (data !== null && data !== '') {
                         setClickedFeature(data);
                     }
