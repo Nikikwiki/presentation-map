@@ -96,9 +96,11 @@ export const MapComponent = (props: MapComponentProps) => {
         };
 
         const pointerMoveListener = (e: MapBrowserEvent<any>) => {
-            const hit = map.hasFeatureAtPixel(e.pixel);
-            map.getTargetElement().style.cursor = (hit ? 'pointer' : '');
-            createPointerOnGrid(e);
+            if (map.hasFeatureAtPixel(e.pixel)) {
+                map.getTargetElement().style.cursor = 'pointer';
+            } else {
+                createPointerOnGrid(e);
+            }
         };
 
         map.on('click', clickListener);
