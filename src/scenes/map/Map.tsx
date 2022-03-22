@@ -54,6 +54,8 @@ export const MapComponent = (props: MapComponentProps) => {
                 coordinate,
                 resolution,
                 (data: any) => {
+                    map.getTargetElement().style.cursor = data ? 'pointer' : '';
+
                     if (data !== null && data !== '') {
                         setClickedFeature(data);
                     }
@@ -62,8 +64,26 @@ export const MapComponent = (props: MapComponentProps) => {
         }
     };
 
+    const createPointerOnGrid = (e: MapBrowserEvent<any>) => {
+        const coordinate = map.getEventCoordinate(e.originalEvent);
+        const resolution = map.getView().getResolution();
+        const clickedLayer = map.forEachLayerAtPixel(e.pixel, (l) => {
+            return l;
+        });
+
+        if (clickedLayer?.getSource() instanceof UTFGrid) {
+            clickedLayer?.getSource().forDataAtCoordinateAndResolution(
+                coordinate,
+                resolution,
+                (data: any) => {
+                    map.getTargetElement().style.cursor = data ? 'pointer' : '';
+                }
+            );
+        }
+    };
+
     useEffect(() => {
-        map.on('click', (e) => {
+        const clickListener = (e: MapBrowserEvent<any>) => {
             const feature = map.forEachFeatureAtPixel(e.pixel, (f, _) => {
                 return f;
             });
@@ -73,12 +93,21 @@ export const MapComponent = (props: MapComponentProps) => {
                 setClickedFeature(null);
                 displayInfo(e);
             }
-        });
+        };
 
-        map.on('pointermove', (e) => {
+        const pointerMoveListener = (e: MapBrowserEvent<any>) => {
             const hit = map.hasFeatureAtPixel(e.pixel);
             map.getTargetElement().style.cursor = (hit ? 'pointer' : '');
-        });
+            createPointerOnGrid(e);
+        };
+
+        map.on('click', clickListener);
+        map.on('pointermove', pointerMoveListener);
+
+        return () => {
+            map.un('pointermove', pointerMoveListener);
+            map.un('click', clickListener);
+        };
     }, [ map ]);
 
     const handleLeftLayerChange = (value: number) => {
@@ -120,7 +149,9 @@ export const MapComponent = (props: MapComponentProps) => {
         copyLayerGroups.forEach(group => group.setVisible(false));
         layerGroups[sliderLayerNumber].setVisible(true);
         map.getControls().forEach(control => {
-            map.removeControl(control);
+            if (control instanceof Swipe) {
+                map.removeControl(control);
+            }
         });
         setSwipeLayerNumber(0);
         setShowLayerDiff(false);

@@ -21,6 +21,20 @@ export const Sidebar = (props: any) => {
         onClose();
     };
 
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                hideSidebar();
+            }
+        };
+
+        document.addEventListener('keydown', listener);
+
+        return () => {
+            document.removeEventListener('keydown', listener);
+        };
+    }, []);
+
     const renderContent = () => {
         if (feature) {
             return Object.entries(feature).map(([ key, value ], i) => {
