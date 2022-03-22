@@ -54,8 +54,6 @@ export const MapComponent = (props: MapComponentProps) => {
                 coordinate,
                 resolution,
                 (data: any) => {
-                    map.getTargetElement().style.cursor = data ? 'pointer' : '';
-
                     if (data !== null && data !== '') {
                         setClickedFeature(data);
                     }
@@ -84,11 +82,11 @@ export const MapComponent = (props: MapComponentProps) => {
 
     useEffect(() => {
         const clickListener = (e: MapBrowserEvent<any>) => {
-            const feature = map.forEachFeatureAtPixel(e.pixel, (f, _) => {
+            const feature = map.forEachFeatureAtPixel(e.pixel, (f) => {
                 return f;
             });
             if (feature) {
-                setClickedFeature(feature?.getProperties());
+                setClickedFeature(feature.getProperties());
             } else {
                 setClickedFeature(null);
                 displayInfo(e);
@@ -139,10 +137,11 @@ export const MapComponent = (props: MapComponentProps) => {
 
     const showDiff = () => {
         copyLayerGroups[swipeLayerNumber].setVisible(true);
-        map.addControl(swipeControl.current);
 
         layerGroups[sliderLayerNumber].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, false));
         copyLayerGroups[swipeLayerNumber].getLayersArray().forEach(layer => swipeControl.current.addLayer(layer, true));
+
+        map.addControl(swipeControl.current);
         setShowLayerDiff(true);
     };
 

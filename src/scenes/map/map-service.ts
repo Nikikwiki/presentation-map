@@ -117,13 +117,15 @@ class MapService {
             const gridLayers = [];
 
             for (let layer of gridTypedLayers) {
+                const utfGrid = new UTFGrid({
+                    tileJSON: {
+                        tiles: [ layer.url ],
+                        grids: [ layer.url ]
+                    }
+                });
+                utfGrid.set('url', layer.url);
                 const a = new TileLayer({
-                    source: new UTFGrid({
-                        tileJSON: {
-                            tiles: [ layer.url ],
-                            grids: [ layer.url ]
-                        }
-                    })
+                    source: utfGrid
                 });
                 gridLayers.push(a);
             }
@@ -178,8 +180,15 @@ class MapService {
                             })
                         });
                     } else {
+                        const utfGrid = new UTFGrid({
+                            tileJSON: {
+                                tiles: [ layer.getSource().get('url') ],
+                                grids: [ layer.getSource().get('url') ]
+                            }
+                        });
+                        utfGrid.set('url', layer.getSource().get('url'));
                         l = new TileLayer({
-                            source: layer.getSource()
+                            source: utfGrid
                         });
                     }
                 } else if (layer instanceof VectorLayer) {
