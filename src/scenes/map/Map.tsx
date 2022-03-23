@@ -42,62 +42,46 @@ export const MapComponent = (props: MapComponentProps) => {
         });
     }, []);
 
-    const displayInfo = (e: MapBrowserEvent<any>) => {
+    const getPointedLayer = (e: MapBrowserEvent<any>) => {
         const coordinate = map.getEventCoordinate(e.originalEvent);
         const resolution = map.getView().getResolution();
-        const clickedLayer = map.forEachLayerAtPixel(e.pixel, (l) => {
-            return l;
-        });
-
-        if (clickedLayer?.getSource() instanceof UTFGrid) {
-            clickedLayer?.getSource().forDataAtCoordinateAndResolution(
-                coordinate,
-                resolution,
-                (data: any) => {
-                    if (data !== null && data !== '') {
-                        setClickedFeature(data);
-                    }
+        return { pointedLayer: map.forEachLayerAtPixel(e.pixel, (l) => { return l; },
+            {
+                layerFilter: (layer) => {
+                    return layer.getSource() instanceof UTFGrid;
                 }
-            );
-        }
-    };
-
-    const createPointerOnGrid = (e: MapBrowserEvent<any>) => {
-        const coordinate = map.getEventCoordinate(e.originalEvent);
-        const resolution = map.getView().getResolution();
-        const clickedLayer = map.forEachLayerAtPixel(e.pixel, (l) => {
-            return l;
-        });
-
-        if (clickedLayer?.getSource() instanceof UTFGrid) {
-            clickedLayer?.getSource().forDataAtCoordinateAndResolution(
-                coordinate,
-                resolution,
-                (data: any) => {
-                    map.getTargetElement().style.cursor = data ? 'pointer' : '';
-                }
-            );
-        }
+            }),
+        coordinate,
+        resolution };
     };
 
     useEffect(() => {
         const clickListener = (e: MapBrowserEvent<any>) => {
+            const { pointedLayer, coordinate, resolution } = getPointedLayer(e);
             const feature = map.forEachFeatureAtPixel(e.pixel, (f) => {
                 return f;
             });
             if (feature) {
                 setClickedFeature(feature.getProperties());
             } else {
-                setClickedFeature(null);
-                displayInfo(e);
+                pointedLayer?.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
+                    (data: any) => {
+                        if (data !== null && data !== '') {
+                            setClickedFeature(data);
+                        } else setClickedFeature(null);
+                    });
             }
         };
 
         const pointerMoveListener = (e: MapBrowserEvent<any>) => {
+            const { pointedLayer, coordinate, resolution } = getPointedLayer(e);
             if (map.hasFeatureAtPixel(e.pixel)) {
                 map.getTargetElement().style.cursor = 'pointer';
             } else {
-                createPointerOnGrid(e);
+                pointedLayer?.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
+                    (data: any) => {
+                        map.getTargetElement().style.cursor = data ? 'pointer' : '';
+                    });
             }
         };
 

@@ -133,8 +133,8 @@ class MapService {
             const group = new LayerGroup({
                 layers: [
                     ...tileLayers,
-                    ...vectorLayers,
-                    ...gridLayers
+                    ...gridLayers,
+                    ...vectorLayers
                 ],
                 visible: false
             });
