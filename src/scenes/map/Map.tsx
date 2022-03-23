@@ -13,6 +13,7 @@ import Swipe from 'ol-ext/control/Swipe';
 import { Sidebar } from 'components/sidebar';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { UTFGrid } from 'ol/source';
+import { Group } from 'ol/layer';
 import { mapService } from './map-service';
 import styles from './styles.scss';
 
@@ -42,46 +43,69 @@ export const MapComponent = (props: MapComponentProps) => {
         });
     }, []);
 
-    const getPointedLayer = (e: MapBrowserEvent<any>) => {
+    const clickOnUTFGrid = (layerGroup: Group, e: MapBrowserEvent<any>) => {
         const coordinate = map.getEventCoordinate(e.originalEvent);
         const resolution = map.getView().getResolution();
-        return { pointedLayer: map.forEachLayerAtPixel(e.pixel, (l) => { return l; },
-            {
-                layerFilter: (layer) => {
-                    return layer.getSource() instanceof UTFGrid;
-                }
-            }),
-        coordinate,
-        resolution };
-    };
-
-    useEffect(() => {
-        const clickListener = (e: MapBrowserEvent<any>) => {
-            const { pointedLayer, coordinate, resolution } = getPointedLayer(e);
-            const feature = map.forEachFeatureAtPixel(e.pixel, (f) => {
-                return f;
-            });
-            if (feature) {
-                setClickedFeature(feature.getProperties());
-            } else {
-                pointedLayer?.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
+        layerGroup.getLayersArray().forEach(layer => {
+            if (layer.getSource() instanceof UTFGrid) {
+                layer.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
                     (data: any) => {
                         if (data !== null && data !== '') {
                             setClickedFeature(data);
                         } else setClickedFeature(null);
                     });
             }
-        };
+        });
+    };
 
-        const pointerMoveListener = (e: MapBrowserEvent<any>) => {
-            const { pointedLayer, coordinate, resolution } = getPointedLayer(e);
-            if (map.hasFeatureAtPixel(e.pixel)) {
-                map.getTargetElement().style.cursor = 'pointer';
-            } else {
-                pointedLayer?.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
+    const pointerMoveUTFGrid = (layerGroup: Group, e: MapBrowserEvent<any>) => {
+        const coordinate = map.getEventCoordinate(e.originalEvent);
+        const resolution = map.getView().getResolution();
+        layerGroup.getLayersArray().forEach(layer => {
+            if (layer.getSource() instanceof UTFGrid) {
+                layer.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
                     (data: any) => {
                         map.getTargetElement().style.cursor = data ? 'pointer' : '';
                     });
+            }
+        });
+    };
+
+    useEffect(() => {
+        const clickListener = (e: MapBrowserEvent<any>) => {
+            const feature = map.forEachFeatureAtPixel(e.pixel, (f) => {
+                return f;
+            });
+            if (feature) {
+                setClickedFeature(feature.getProperties());
+            } else {
+                if (!showLayerDiff) {
+                    clickOnUTFGrid(layerGroups[sliderLayerNumber], e);
+                } else {
+                    const { left } = document.querySelectorAll('.ol-swipe')[0].getBoundingClientRect();
+                    if (e.pixel[0] < left) {
+                        clickOnUTFGrid(layerGroups[sliderLayerNumber], e);
+                    } else {
+                        clickOnUTFGrid(copyLayerGroups[swipeLayerNumber], e);
+                    }
+                }
+            }
+        };
+
+        const pointerMoveListener = (e: MapBrowserEvent<any>) => {
+            if (map.hasFeatureAtPixel(e.pixel)) {
+                map.getTargetElement().style.cursor = 'pointer';
+            } else {
+                if (!showLayerDiff) {
+                    pointerMoveUTFGrid(layerGroups[sliderLayerNumber], e);
+                } else {
+                    const { left } = document.querySelectorAll('.ol-swipe')[0].getBoundingClientRect();
+                    if (e.pixel[0] < left) {
+                        pointerMoveUTFGrid(layerGroups[sliderLayerNumber], e);
+                    } else {
+                        pointerMoveUTFGrid(copyLayerGroups[swipeLayerNumber], e);
+                    }
+                }
             }
         };
 
@@ -89,10 +113,10 @@ export const MapComponent = (props: MapComponentProps) => {
         map.on('pointermove', pointerMoveListener);
 
         return () => {
-            map.un('pointermove', pointerMoveListener);
             map.un('click', clickListener);
+            map.un('pointermove', pointerMoveListener);
         };
-    }, [ map ]);
+    }, [ copyLayerGroups, layerGroups, sliderLayerNumber, swipeLayerNumber, showLayerDiff ]);
 
     const handleLeftLayerChange = (value: number) => {
         layerGroups.forEach(group => group.setVisible(false));
