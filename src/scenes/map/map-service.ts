@@ -6,14 +6,25 @@ import VectorLayer from 'ol/layer/Vector';
 import { OSM, UTFGrid } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { Fill, Stroke, Style } from 'ol/style';
+import { Circle, Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import { View } from 'ol';
 import * as olControl from 'ol/control';
 import { MouseWheelZoom, defaults } from 'ol/interaction';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import XYZ from 'ol/source/XYZ';
+import GeometryType from 'ol/geom/GeometryType';
 
+interface VectorStyles {
+    Circle: Style[];
+    GeometryCollection: Style[];
+    LineString: Style[];
+    MultiLineString: Style[];
+    MultiPoint: Style[];
+    MultiPolygon: Style[];
+    Point: Style[];
+    Polygon: Style[];
+}
 class MapService {
     public async generateMap(mapConfig: MapConfig, slices: Slice[], mapRef:any): Promise<{
         map: OlMap,
@@ -96,9 +107,7 @@ class MapService {
                             featureProjection: 'EPSG:3857'
                         })
                     }),
-                    style: new Style({
-                        image: this.generateCircleStyle()
-                    })
+                    style: this.generateStyles().Point
                 });
                 vectorLayers.push(a);
             }
@@ -147,6 +156,64 @@ class MapService {
 
     private async getLayer(url: string): Promise<AxiosResponse<any>> {
         return axios.get(url);
+    }
+
+    private generateStyles(): VectorStyles {
+        const styles: any = {};
+        const white = [ 255, 255, 255, 1 ];
+        const blue = [ 0, 153, 255, 1 ];
+        const width = 3;
+        styles[GeometryType.POLYGON] = [
+            new Style({
+                fill: new Fill({
+                    color: [ 255, 255, 255, 0.5 ]
+                })
+            })
+        ];
+        styles[GeometryType.MULTI_POLYGON] = styles[GeometryType.POLYGON];
+
+        styles[GeometryType.LINE_STRING] = [
+            new Style({
+                stroke: new Stroke({
+                    color: white,
+                    width: width + 2
+                })
+            }),
+            new Style({
+                stroke: new Stroke({
+                    color: blue,
+                    width: width
+                })
+            })
+        ];
+        styles[GeometryType.MULTI_LINE_STRING] = styles[GeometryType.LINE_STRING];
+
+        styles[GeometryType.CIRCLE] = styles[GeometryType.POLYGON].concat(
+            styles[GeometryType.LINE_STRING]
+        );
+
+        styles[GeometryType.POINT] = [
+            new Style({
+                image: new Circle({
+                    radius: width * 2,
+                    fill: new Fill({
+                        color: blue
+                    }),
+                    stroke: new Stroke({
+                        color: white,
+                        width: width / 2
+                    })
+                }),
+                zIndex: Infinity
+            })
+        ];
+        styles[GeometryType.MULTI_POINT] = styles[GeometryType.POINT];
+
+        styles[GeometryType.GEOMETRY_COLLECTION] = styles[
+            GeometryType.POLYGON
+        ].concat(styles[GeometryType.LINE_STRING], styles[GeometryType.POINT]);
+
+        return styles;
     }
 
     private generateCircleStyle() {
