@@ -79,6 +79,7 @@ export const MapComponent = (props: MapComponentProps) => {
             if (feature) {
                 setClickedFeature(feature.getProperties());
             } else {
+                setClickedFeature(null);
                 if (!showLayerDiff) {
                     clickOnUTFGrid(layerGroups[sliderLayerNumber], e);
                 } else {
@@ -96,6 +97,7 @@ export const MapComponent = (props: MapComponentProps) => {
             if (map.hasFeatureAtPixel(e.pixel)) {
                 map.getTargetElement().style.cursor = 'pointer';
             } else {
+                map.getTargetElement().style.cursor = '';
                 if (!showLayerDiff) {
                     pointerMoveUTFGrid(layerGroups[sliderLayerNumber], e);
                 } else {
