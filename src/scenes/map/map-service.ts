@@ -89,27 +89,34 @@ class MapService {
 
             const gridTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'grid');
 
-            const rawFeaturesCollection = [];
+            const featureConfig = [];
 
             for (let layer of vectorTypedLayers) {
                 // eslint-disable-next-line no-await-in-loop
                 const { data: layerByUrl } = await this.getLayer(layer.url);
-                rawFeaturesCollection.push(layerByUrl);
+
+                featureConfig.push({
+                    width: layer.width,
+                    fillColor: layer.fillColor,
+                    strokeColor: layer.strokeColor,
+                    layerByUrl: layerByUrl
+                });
             }
 
             const vectorLayers = [];
 
-            for (let layer of rawFeaturesCollection) {
-                const a = new VectorLayer({
+            for (let layer of featureConfig) {
+                const styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
+
+                vectorLayers.push(new VectorLayer({
                     source: new VectorSource({
-                        features: new GeoJSON().readFeatures(layer, {
+                        features: new GeoJSON().readFeatures(layer.layerByUrl, {
                             dataProjection: 'EPSG:4326',
                             featureProjection: 'EPSG:3857'
                         })
                     }),
-                    style: this.generateStyles().Point
-                });
-                vectorLayers.push(a);
+                    style: styles
+                }));
             }
 
             const tileLayers = [];
@@ -158,81 +165,26 @@ class MapService {
         return axios.get(url);
     }
 
-    private generateStyles(): VectorStyles {
-        const styles: any = {};
-        const white = [ 255, 255, 255, 1 ];
-        const blue = [ 0, 153, 255, 1 ];
-        const width = 3;
-        styles[GeometryType.POLYGON] = [
-            new Style({
-                fill: new Fill({
-                    color: [ 255, 255, 255, 0.5 ]
-                })
-            })
-        ];
-        styles[GeometryType.MULTI_POLYGON] = styles[GeometryType.POLYGON];
-
-        styles[GeometryType.LINE_STRING] = [
-            new Style({
-                stroke: new Stroke({
-                    color: white,
-                    width: width + 2
-                })
+    private generateStyles(
+        strokeColor: number[],
+        fillColor: number[],
+        width: number,
+    ) {
+        return new Style({
+            fill: new Fill({ color: fillColor }),
+            stroke: new Stroke({
+                color: strokeColor,
+                width: width
             }),
-            new Style({
+            image: new Circle({
+                radius: width * 2,
+                fill: new Fill({ color: fillColor }),
                 stroke: new Stroke({
-                    color: blue,
-                    width: width
+                    color: strokeColor,
+                    width: width / 2
                 })
             })
-        ];
-        styles[GeometryType.MULTI_LINE_STRING] = styles[GeometryType.LINE_STRING];
-
-        styles[GeometryType.CIRCLE] = styles[GeometryType.POLYGON].concat(
-            styles[GeometryType.LINE_STRING]
-        );
-
-        styles[GeometryType.POINT] = [
-            new Style({
-                image: new Circle({
-                    radius: width * 2,
-                    fill: new Fill({
-                        color: blue
-                    }),
-                    stroke: new Stroke({
-                        color: white,
-                        width: width / 2
-                    })
-                }),
-                zIndex: Infinity
-            })
-        ];
-        styles[GeometryType.MULTI_POINT] = styles[GeometryType.POINT];
-
-        styles[GeometryType.GEOMETRY_COLLECTION] = styles[
-            GeometryType.POLYGON
-        ].concat(styles[GeometryType.LINE_STRING], styles[GeometryType.POINT]);
-
-        return styles;
-    }
-
-    private generateCircleStyle() {
-        return new CircleStyle({
-            radius: 10,
-            fill: new Fill({
-                color: this.getRandomColor()
-            }),
-            stroke: new Stroke({ color: 'yellow', width: 2 })
         });
-    }
-
-    private getRandomColor() {
-        let letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
     }
 
     private copyLayerGroup(layerGroups: LayerGroup[]): LayerGroup[] {

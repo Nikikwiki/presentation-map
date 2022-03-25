@@ -15,5 +15,8 @@ export interface Slice {
 
 export interface Layer {
     type: string,
-    url: string
+    url: string,
+    width: number,
+    fillColor: number[],
+    strokeColor: number[]
 }

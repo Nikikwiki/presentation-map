@@ -5,7 +5,11 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 0, 153, 255, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "figureType": "Point"
             },
             {
                 "type": "tile",
@@ -19,7 +23,11 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 4,
+                "fillColor": [ 77, 208, 225, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "figureType": "Point"
             }
         ]
     },
@@ -29,7 +37,11 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 7,
+                "fillColor": [ 255, 160, 0, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "figureType": "Point"
             },
             {
                 "type": "tile",
@@ -43,7 +55,11 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 0, 153, 255, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "figureType": "Point"
             }
         ]
     },
@@ -53,7 +69,11 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 0, 153, 255, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "figureType": "Point"
             },
             {
                 "type": "tile",
