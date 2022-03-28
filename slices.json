@@ -23,7 +23,7 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
-                "iconSrc": "icons/circle.png",
+                "iconSrc": "circle.png",
                 "iconSize": 1000,
                 "iconScale": 0.02
             }
@@ -55,7 +55,7 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
-                "iconSrc": "icons/yellow-circle.png",
+                "iconSrc": "yellow-circle.png",
                 "iconSize": 1000,
                 "iconScale": 0.05
             }
