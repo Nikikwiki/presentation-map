@@ -21,5 +21,7 @@ export interface Layer {
     strokeColor: number[],
     iconSrc: string,
     iconSize: number,
-    iconScale: number
+    iconScale: number,
+    cluster: boolean,
+    distance: number
 }

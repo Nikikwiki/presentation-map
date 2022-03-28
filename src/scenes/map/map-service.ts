@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Layer, Slice, MapConfig } from 'types';
 import { Group as LayerGroup, Tile as TileLayer } from 'ol/layer';
 import VectorLayer from 'ol/layer/Vector';
-import { OSM, UTFGrid } from 'ol/source';
+import { Cluster, OSM, UTFGrid } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import {
@@ -94,7 +94,9 @@ class MapService {
                     layerByUrl: layerByUrl,
                     iconSrc: layer.iconSrc,
                     iconSize: layer.iconSize,
-                    iconScale: layer.iconScale
+                    iconScale: layer.iconScale,
+                    cluster: layer.cluster,
+                    distance: layer.distance
                 });
             }
 
@@ -102,6 +104,7 @@ class MapService {
 
             for (let layer of featureConfig) {
                 let styles;
+                let source;
                 if (layer.iconSrc) {
                     styles = new Style({
                         image: new Icon({
@@ -113,13 +116,25 @@ class MapService {
                 } else {
                     styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
                 }
+
+                const vectorSource = new VectorSource({
+                    features: new GeoJSON().readFeatures(layer.layerByUrl, {
+                        dataProjection: 'EPSG:4326',
+                        featureProjection: 'EPSG:3857'
+                    })
+                });
+
+                if (layer.cluster) {
+                    source = new Cluster({
+                        distance: layer.distance,
+                        source: vectorSource
+                    });
+                } else {
+                    source = vectorSource;
+                }
+
                 vectorLayers.push(new VectorLayer({
-                    source: new VectorSource({
-                        features: new GeoJSON().readFeatures(layer.layerByUrl, {
-                            dataProjection: 'EPSG:4326',
-                            featureProjection: 'EPSG:3857'
-                        })
-                    }),
+                    source: source,
                     style: styles
                 }));
             }
