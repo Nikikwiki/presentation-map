@@ -9,13 +9,11 @@ import GeoJSON from 'ol/format/GeoJSON';
 import {
     Circle, Fill, Stroke, Style, Icon
 } from 'ol/style';
-import CircleStyle from 'ol/style/Circle';
 import { View } from 'ol';
 import * as olControl from 'ol/control';
 import { MouseWheelZoom, defaults } from 'ol/interaction';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import XYZ from 'ol/source/XYZ';
-import GeometryType from 'ol/geom/GeometryType';
 
 class MapService {
     public async generateMap(mapConfig: MapConfig, slices: Slice[], mapRef:any): Promise<{
@@ -95,7 +93,6 @@ class MapService {
             for (let layer of featureConfig) {
                 const styles = this.getFeatureStyles(layer);
                 const source = this.getFeatureSource(layer);
-
                 vectorLayers.push(new VectorLayer({
                     source: source,
                     style: styles
@@ -227,12 +224,24 @@ class MapService {
                         });
                     }
                 } else if (layer instanceof VectorLayer) {
-                    l = new VectorLayer({
-                        source: new VectorSource({
-                            features: layer.getSource().getFeatures()
-                        }),
-                        style: layer.getStyle()
-                    });
+                    if (layer.getSource() instanceof Cluster) {
+                        l = new VectorLayer({
+                            source: new Cluster({
+                                distance: layer.getSource().distance,
+                                source: new VectorSource({
+                                    features: layer.getSource().getSource().getFeatures()
+                                })
+                            }),
+                            style: layer.getStyle()
+                        });
+                    } else {
+                        l = new VectorLayer({
+                            source: new VectorSource({
+                                features: layer.getSource().getFeatures()
+                            }),
+                            style: layer.getStyle()
+                        });
+                    }
                 }
                 return l;
             });
