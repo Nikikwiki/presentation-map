@@ -5,24 +5,14 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
-            },
-            {
-                "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 0, 153, 255, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ]
             },
             {
                 "type": "tile",
                 "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
-            },
-            {
-                "type": "tile",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489&x={x}&y={-y}&z={z}&lng=ru"
-            },
-            
-            {
-                "type": "grid",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
             }
         ]
     },
@@ -32,23 +22,10 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
-            },
-            {
-                "type": "vector",
-                "url": "vector-layer.geojson"
-            },
-            {
-                "type": "vector",
-                "url": "vector-layer.geojson"
-            },
-            {
-                "type": "tile",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4488&x={x}&y={-y}&z={z}&lng=ru"
-            },
-            {
-                "type": "grid",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4488&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
+                "url": "vector-layer.geojson",
+                "iconSrc": "icons/circle.png",
+                "iconSize": 1000,
+                "iconScale": 0.02
             }
         ]
     },
@@ -58,7 +35,12 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 7,
+                "fillColor": [ 255, 160, 0, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "cluster": true,
+                "distance": 25
             },
             {
                 "type": "tile",
@@ -72,16 +54,10 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
-            },
-            {
-                "type": "tile",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489&x={x}&y={-y}&z={z}&lng=ru"
-            },
-            
-            {
-                "type": "grid",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4489&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
+                "url": "vector-layer.geojson",
+                "iconSrc": "icons/yellow-circle.png",
+                "iconSize": 1000,
+                "iconScale": 0.05
             }
         ]
     },
@@ -91,7 +67,12 @@
         "layers": [
             {
                 "type": "vector",
-                "url": "vector-layer.geojson"
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 38, 166, 154, 1 ],
+                "strokeColor": [ 255, 249, 196, 1 ],
+                "cluster": true,
+                "distance": 25
             },
             {
                 "type": "tile",
