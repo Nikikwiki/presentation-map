@@ -87,51 +87,14 @@ class MapService {
                 // eslint-disable-next-line no-await-in-loop
                 const { data: layerByUrl } = await this.getLayer(layer.url);
 
-                featureConfig.push({
-                    width: layer.width,
-                    fillColor: layer.fillColor,
-                    strokeColor: layer.strokeColor,
-                    layerByUrl: layerByUrl,
-                    iconSrc: layer.iconSrc,
-                    iconSize: layer.iconSize,
-                    iconScale: layer.iconScale,
-                    cluster: layer.cluster,
-                    distance: layer.distance
-                });
+                featureConfig.push({ ...layer, layerByUrl });
             }
 
             const vectorLayers = [];
 
             for (let layer of featureConfig) {
-                let styles;
-                let source;
-                if (layer.iconSrc) {
-                    styles = new Style({
-                        image: new Icon({
-                            src: layer.iconSrc,
-                            size: [ layer.iconSize, layer.iconSize ],
-                            scale: layer.iconScale
-                        })
-                    });
-                } else {
-                    styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
-                }
-
-                const vectorSource = new VectorSource({
-                    features: new GeoJSON().readFeatures(layer.layerByUrl, {
-                        dataProjection: 'EPSG:4326',
-                        featureProjection: 'EPSG:3857'
-                    })
-                });
-
-                if (layer.cluster) {
-                    source = new Cluster({
-                        distance: layer.distance,
-                        source: vectorSource
-                    });
-                } else {
-                    source = vectorSource;
-                }
+                const styles = this.getFeatureStyles(layer);
+                const source = this.getFeatureSource(layer);
 
                 vectorLayers.push(new VectorLayer({
                     source: source,
@@ -179,6 +142,43 @@ class MapService {
         }
 
         return groups;
+    }
+
+    private getFeatureStyles(layer: any) {
+        let styles;
+        if (layer.iconSrc) {
+            styles = new Style({
+                image: new Icon({
+                    src: layer.iconSrc,
+                    size: [ layer.iconSize, layer.iconSize ],
+                    scale: layer.iconScale
+                })
+            });
+        } else {
+            styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
+        }
+        return styles;
+    }
+
+    private getFeatureSource(layer: any) {
+        let source;
+        const vectorSource = new VectorSource({
+            features: new GeoJSON().readFeatures(layer.layerByUrl, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857'
+            })
+        });
+
+        if (layer.cluster) {
+            source = new Cluster({
+                distance: layer.distance,
+                source: vectorSource
+            });
+        } else {
+            source = vectorSource;
+        }
+
+        return source;
     }
 
     private async getLayer(url: string): Promise<AxiosResponse<any>> {
