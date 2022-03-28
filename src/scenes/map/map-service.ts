@@ -6,7 +6,9 @@ import VectorLayer from 'ol/layer/Vector';
 import { OSM, UTFGrid } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { Circle, Fill, Stroke, Style } from 'ol/style';
+import {
+    Circle, Fill, Stroke, Style, Icon
+} from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import { View } from 'ol';
 import * as olControl from 'ol/control';
@@ -15,16 +17,6 @@ import { platformModifierKeyOnly } from 'ol/events/condition';
 import XYZ from 'ol/source/XYZ';
 import GeometryType from 'ol/geom/GeometryType';
 
-interface VectorStyles {
-    Circle: Style[];
-    GeometryCollection: Style[];
-    LineString: Style[];
-    MultiLineString: Style[];
-    MultiPoint: Style[];
-    MultiPolygon: Style[];
-    Point: Style[];
-    Polygon: Style[];
-}
 class MapService {
     public async generateMap(mapConfig: MapConfig, slices: Slice[], mapRef:any): Promise<{
         map: OlMap,
@@ -99,15 +91,28 @@ class MapService {
                     width: layer.width,
                     fillColor: layer.fillColor,
                     strokeColor: layer.strokeColor,
-                    layerByUrl: layerByUrl
+                    layerByUrl: layerByUrl,
+                    iconSrc: layer.iconSrc,
+                    iconSize: layer.iconSize,
+                    iconScale: layer.iconScale
                 });
             }
 
             const vectorLayers = [];
 
             for (let layer of featureConfig) {
-                const styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
-
+                let styles;
+                if (layer.iconSrc) {
+                    styles = new Style({
+                        image: new Icon({
+                            src: layer.iconSrc,
+                            size: [ layer.iconSize, layer.iconSize ],
+                            scale: layer.iconScale
+                        })
+                    });
+                } else {
+                    styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
+                }
                 vectorLayers.push(new VectorLayer({
                     source: new VectorSource({
                         features: new GeoJSON().readFeatures(layer.layerByUrl, {
@@ -165,11 +170,7 @@ class MapService {
         return axios.get(url);
     }
 
-    private generateStyles(
-        strokeColor: number[],
-        fillColor: number[],
-        width: number,
-    ) {
+    private generateStyles(strokeColor: number[], fillColor: number[], width: number) {
         return new Style({
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({

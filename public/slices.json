@@ -8,8 +8,7 @@
                 "url": "vector-layer.geojson",
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ],
-                "figureType": "Point"
+                "strokeColor": [ 255, 255, 255, 1 ]
             },
             {
                 "type": "tile",
@@ -24,10 +23,9 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
-                "width": 4,
-                "fillColor": [ 77, 208, 225, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ],
-                "figureType": "Point"
+                "iconSrc": "icons/circle.png",
+                "iconSize": 1000,
+                "iconScale": 0.02
             }
         ]
     },
@@ -40,8 +38,7 @@
                 "url": "vector-layer.geojson",
                 "width": 7,
                 "fillColor": [ 255, 160, 0, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ],
-                "figureType": "Point"
+                "strokeColor": [ 255, 255, 255, 1 ]
             },
             {
                 "type": "tile",
@@ -56,10 +53,9 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
-                "width": 6,
-                "fillColor": [ 0, 153, 255, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ],
-                "figureType": "Point"
+                "iconSrc": "icons/yellow-circle.png",
+                "iconSize": 1000,
+                "iconScale": 0.05
             }
         ]
     },
@@ -71,9 +67,8 @@
                 "type": "vector",
                 "url": "vector-layer.geojson",
                 "width": 6,
-                "fillColor": [ 0, 153, 255, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ],
-                "figureType": "Point"
+                "fillColor": [ 38, 166, 154, 1 ],
+                "strokeColor": [ 255, 249, 196, 1 ]
             },
             {
                 "type": "tile",

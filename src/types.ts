@@ -18,5 +18,8 @@ export interface Layer {
     url: string,
     width: number,
     fillColor: number[],
-    strokeColor: number[]
+    strokeColor: number[],
+    iconSrc: string,
+    iconSize: number,
+    iconScale: number
 }
