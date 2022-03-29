@@ -8,7 +8,8 @@
                 "url": "vector-layer.geojson",
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ]
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "name": "Векторный слой нарисованный"
             },
             {
                 "type": "tile",
@@ -25,7 +26,8 @@
                 "url": "vector-layer.geojson",
                 "iconSrc": "icons/circle.png",
                 "iconSize": 1000,
-                "iconScale": 0.02
+                "iconScale": 0.02,
+                "name": "Векторный слой картиночный"
             }
         ]
     },
@@ -40,7 +42,8 @@
                 "fillColor": [ 255, 160, 0, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
                 "cluster": true,
-                "distance": 25
+                "distance": 25,
+                "name": "Векотрный слой с кластером"
             },
             {
                 "type": "tile",
@@ -57,7 +60,8 @@
                 "url": "vector-layer.geojson",
                 "iconSrc": "icons/yellow-circle.png",
                 "iconSize": 1000,
-                "iconScale": 0.05
+                "iconScale": 0.05,
+                "name": "Векотрный слой картиночный"
             }
         ]
     },
@@ -70,7 +74,8 @@
                 "url": "vector-layer.geojson",
                 "width": 6,
                 "fillColor": [ 38, 166, 154, 1 ],
-                "strokeColor": [ 255, 249, 196, 1 ]
+                "strokeColor": [ 255, 249, 196, 1 ],
+                "name": "Векотрный слой рисованный"
             },
             {
                 "type": "tile",
@@ -78,7 +83,8 @@
             },
             {
                 "type": "tile",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru"
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru",
+                "name": "Тайловый слой"
             },
             {
                 "type": "grid",

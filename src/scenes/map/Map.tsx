@@ -232,7 +232,18 @@ export const MapComponent = (props: MapComponentProps) => {
                 </div>
                 <div className={styles.bottomControls}>
                     <div className={styles.accodrionWrapper}>
-                        <AccordionComponent />
+                        <div className={styles.accordionLeft}>
+                            <AccordionComponent layerGroup={layerGroups[sliderLayerNumber]} />
+                        </div>
+                        <div className={styles.accordionRight}>
+                            {
+                                showLayerDiff
+                                    ? (
+                                        <AccordionComponent layerGroup={copyLayerGroups[swipeLayerNumber]} />
+                                    ) : null
+
+                            }
+                        </div>
                     </div>
                     <div className={styles.sliderWrapper}>
                         <DateSlider

@@ -93,21 +93,24 @@ class MapService {
             for (let layer of featureConfig) {
                 const styles = this.getFeatureStyles(layer);
                 const source = this.getFeatureSource(layer);
-                vectorLayers.push(new VectorLayer({
+                const vectorLayer = new VectorLayer({
                     source: source,
                     style: styles
-                }));
+                });
+                vectorLayer.set('name', layer.name);
+                vectorLayers.push(vectorLayer);
             }
 
             const tileLayers = [];
 
             for (let layer of tileTypedLayers) {
-                const a = new TileLayer({
+                const tileLayer = new TileLayer({
                     source: new XYZ({
                         url: layer.url
                     })
                 });
-                tileLayers.push(a);
+                tileLayer.set('name', layer.name);
+                tileLayers.push(tileLayer);
             }
 
             const gridLayers = [];
@@ -243,6 +246,7 @@ class MapService {
                         });
                     }
                 }
+                l.set('name', layer.get('name'));
                 return l;
             });
 

@@ -23,5 +23,6 @@ export interface Layer {
     iconSize: number,
     iconScale: number,
     cluster: boolean,
-    distance: number
+    distance: number,
+    name: string
 }

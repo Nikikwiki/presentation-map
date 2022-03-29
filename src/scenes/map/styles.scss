@@ -92,11 +92,25 @@
 }
 
 .accodrionWrapper {
-    height: 35vh;
+    width: 100%;
     display: flex;
-    align-items: flex-end;
-    width: 25vw;
-    margin-right: 8px;
+    justify-content: space-between;
+
+    .accordionRight {
+        height: 35vh;
+        display: flex;
+        align-items: flex-end;
+        width: 25vw;
+        margin-right: 8px;
+    }
+
+    .accordionLeft {
+        height: 35vh;
+        display: flex;
+        align-items: flex-end;
+        width: 25vw;
+        margin-left: 8px;
+    }
 }
 
 .sliderWrapper {

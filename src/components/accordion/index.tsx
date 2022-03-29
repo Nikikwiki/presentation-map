@@ -4,9 +4,31 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LayerGroup from 'ol/layer/Group';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import styles from './styles.scss';
 
-export const AccordionComponent = () => {
+export const AccordionComponent = ({ layerGroup }: { layerGroup: LayerGroup }) => {
+    const renderContent = () => {
+        return (
+            <FormGroup>
+                {
+                    layerGroup.getLayersArray().map((layer, i) => {
+                        if (layer.get('name')) {
+                            return (
+                                <FormControlLabel
+                                    key={i.toString()}
+                                    control={<Checkbox defaultChecked />}
+                                    label={layer.get('name')}
+                                />
+                            );
+                        } else return null;
+                    })
+                }
+            </FormGroup>
+        );
+    };
+
     return (
         <Accordion className={styles.accordion}>
             <AccordionSummary
@@ -14,12 +36,11 @@ export const AccordionComponent = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography>Accordion 1</Typography>
+                <Typography>Легенда</Typography>
             </AccordionSummary>
             <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
+                <Typography component="span">
+                    { layerGroup ? renderContent() : null }
                 </Typography>
             </AccordionDetails>
         </Accordion>
