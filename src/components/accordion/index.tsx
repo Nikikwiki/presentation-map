@@ -9,6 +9,14 @@ import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import styles from './styles.scss';
 
 export const AccordionComponent = ({ layerGroup }: { layerGroup: LayerGroup }) => {
+    const checkLayer = (e: any, layer: any) => {
+        if (e.target.checked) {
+            layer.setVisible(true);
+        } else {
+            layer.setVisible(false);
+        }
+    };
+
     const renderContent = () => {
         return (
             <FormGroup>
@@ -18,7 +26,12 @@ export const AccordionComponent = ({ layerGroup }: { layerGroup: LayerGroup }) =
                             return (
                                 <FormControlLabel
                                     key={i.toString()}
-                                    control={<Checkbox defaultChecked />}
+                                    control={(
+                                        <Checkbox
+                                            defaultChecked
+                                            onChange={(e) => checkLayer(e, layer)}
+                                        />
+                                    )}
                                     label={layer.get('name')}
                                 />
                             );
