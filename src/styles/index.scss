@@ -13,7 +13,7 @@ body {
     margin: 0;
     overflow: hidden;
 
-    font-family: 'Arial', Helvetica, sans-serif;
+    font-family: 'Roboto', Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 400;
 }
@@ -33,14 +33,14 @@ body {
 ::placeholder {
     font-size: 14px;
     font-weight: 400;
-    font-family: 'Arial', Helvetica, sans-serif;
+    font-family: 'Roboto', Helvetica, sans-serif;
 }
 
 input,
 textarea {
     font-size: 14px;
     font-weight: 400;
-    font-family: 'Arial', Helvetica, sans-serif;
+    font-family: 'Roboto', Helvetica, sans-serif;
 
     border: none;
 
@@ -52,7 +52,7 @@ textarea {
     &:active {
         font-size: 14px;
         font-weight: 400;
-        font-family: 'Arial', Helvetica, sans-serif;
+        font-family: 'Roboto', Helvetica, sans-serif;
 
 
         outline: none;
@@ -66,7 +66,7 @@ button {
     color: inherit;
 
     font-size: 14px;
-    font-family: 'Arial', Helvetica, sans-serif;
+    font-family: 'Roboto', Helvetica, sans-serif;
 
 
     outline: none;

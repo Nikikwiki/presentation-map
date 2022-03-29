@@ -28,7 +28,6 @@
     .rightControlsContent {
         flex-grow: 1;
     }
-
 }
 
 .zoom-controls {
@@ -66,11 +65,15 @@
 
 }
 
-.bottom-controls {
+.bottomControls {
     display: flex;
-    flex-grow: 1;
     align-items: flex-end;
     margin-bottom: 8px;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+
 
     &.slider {
         pointer-events: all;
@@ -86,6 +89,14 @@
     .diffControlsButton {
         padding: 8px;
     }
+}
+
+.accodrionWrapper {
+    height: 35vh;
+    display: flex;
+    align-items: flex-end;
+    width: 25vw;
+    margin-right: 8px;
 }
 
 .sliderWrapper {

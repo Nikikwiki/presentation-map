@@ -11,6 +11,7 @@ import 'ol-ext/dist/ol-ext.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
+import { AccordionComponent } from 'components';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { UTFGrid } from 'ol/source';
 import { Group } from 'ol/layer';
@@ -228,9 +229,11 @@ export const MapComponent = (props: MapComponentProps) => {
                             –
                         </button>
                     </div>
-                    <div className={styles.rightControlsContent}></div>
                 </div>
                 <div className={styles.bottomControls}>
+                    <div className={styles.accodrionWrapper}>
+                        <AccordionComponent />
+                    </div>
                     <div className={styles.sliderWrapper}>
                         <DateSlider
                             onChange={handleLeftLayerChange}
