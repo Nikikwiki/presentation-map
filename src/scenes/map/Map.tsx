@@ -76,8 +76,19 @@ export const MapComponent = (props: MapComponentProps) => {
             const feature = map.forEachFeatureAtPixel(e.pixel, (f) => {
                 return f;
             });
+            // TODO реализовать логику отображения кластера
             if (feature) {
-                setClickedFeature(feature.getProperties());
+                if (feature.getProperties().features) {
+                    if (feature.getProperties().features.length === 1) {
+                        setClickedFeature(feature.getProperties().features[0]);
+                    } else {
+                        setClickedFeature({
+                            type: 'это кластер'
+                        });
+                    }
+                } else {
+                    setClickedFeature(feature.getProperties());
+                }
             } else {
                 setClickedFeature(null);
                 if (!showLayerDiff) {

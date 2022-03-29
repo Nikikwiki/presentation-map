@@ -70,9 +70,7 @@
                 "url": "vector-layer.geojson",
                 "width": 6,
                 "fillColor": [ 38, 166, 154, 1 ],
-                "strokeColor": [ 255, 249, 196, 1 ],
-                "cluster": true,
-                "distance": 25
+                "strokeColor": [ 255, 249, 196, 1 ]
             },
             {
                 "type": "tile",
