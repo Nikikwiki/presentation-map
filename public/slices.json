@@ -10,7 +10,8 @@
                 "fillColor": [ 0, 153, 255, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
                 "name": "Векторный слой нарисованный",
-                "displayIcon": "icons/blueIcon.png"
+                "displayIcon": "icons/blueIcon.png",
+                "sharedId": "1"
             },
             {
                 "type": "tile",
@@ -95,6 +96,26 @@
             {
                 "type": "grid",
                 "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "date": "2026-01-01 00:00:00",
+        "layers": [
+            {
+                "type": "vector",
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 0, 153, 255, 1 ],
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "name": "Векторный слой нарисованный",
+                "displayIcon": "icons/blueIcon.png",
+                "sharedId": "1"
+            },
+            {
+                "type": "tile",
+                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
     }

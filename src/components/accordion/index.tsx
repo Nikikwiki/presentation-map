@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -8,13 +8,33 @@ import LayerGroup from 'ol/layer/Group';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import styles from './styles.scss';
 
-export const AccordionComponent = ({ layerGroup }: { layerGroup: LayerGroup }) => {
+export const AccordionComponent = (
+    { layerGroup, sideGroups }: { layerGroup: LayerGroup, sideGroups: LayerGroup[] }
+) => {
+    const [ render, setRender ] = useState({});
     const checkLayer = (e: any, layer: any) => {
+        const sharedId = layer.get('sharedId');
         if (e.target.checked) {
             layer.setVisible(true);
+            sideGroups.forEach(group => {
+                group.getLayersArray().forEach(l => {
+                    if (sharedId && l.get('sharedId') === sharedId) {
+                        l.setVisible(true);
+                    }
+                });
+            });
         } else {
             layer.setVisible(false);
+            sideGroups.forEach(group => {
+                group.getLayersArray().forEach(l => {
+                    if (sharedId && l.get('sharedId') === sharedId) {
+                        l.setVisible(false);
+                    }
+                });
+            });
         }
+
+        setRender({});
     };
 
     const renderContent = () => {
@@ -28,7 +48,7 @@ export const AccordionComponent = ({ layerGroup }: { layerGroup: LayerGroup }) =
                                     key={i.toString()}
                                     control={(
                                         <Checkbox
-                                            defaultChecked
+                                            checked={layer.getVisible()}
                                             onChange={(e) => checkLayer(e, layer)}
                                         />
                                     )}

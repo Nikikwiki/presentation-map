@@ -25,5 +25,6 @@ export interface Layer {
     cluster: boolean, // кластеризовать слой
     distance: number, // дальность кластеризации
     name: string, // название слоя в легенде
-    displayIcon: string // ссылка на картинку для отображения в легенде
+    displayIcon: string, // ссылка на картинку для отображения в легенде
+    sharedId: string // общий ID слоев для скрытия
 }
