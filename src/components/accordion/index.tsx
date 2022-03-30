@@ -32,7 +32,18 @@ export const AccordionComponent = ({ layerGroup }: { layerGroup: LayerGroup }) =
                                             onChange={(e) => checkLayer(e, layer)}
                                         />
                                     )}
-                                    label={layer.get('name')}
+                                    label={(
+                                        <div className={styles.label}>
+                                            <div
+                                                className={styles.lableIcon}
+                                                style={{ backgroundImage: `url(${layer.get('displayIcon')})` }}
+                                            >
+                                            </div>
+                                            <span>
+                                                {layer.get('name')}
+                                            </span>
+                                        </div>
+                                    )}
                                 />
                             );
                         } else return null;

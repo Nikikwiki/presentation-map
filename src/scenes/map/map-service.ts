@@ -98,6 +98,7 @@ class MapService {
                     style: styles
                 });
                 vectorLayer.set('name', layer.name);
+                vectorLayer.set('displayIcon', layer.displayIcon);
                 vectorLayers.push(vectorLayer);
             }
 
@@ -110,6 +111,7 @@ class MapService {
                     })
                 });
                 tileLayer.set('name', layer.name);
+                tileLayer.set('displayIcon', layer.displayIcon);
                 tileLayers.push(tileLayer);
             }
 
@@ -123,6 +125,7 @@ class MapService {
                     }
                 });
                 utfGrid.set('url', layer.url);
+                utfGrid.set('displayIcon', layer.displayIcon);
                 const a = new TileLayer({
                     source: utfGrid
                 });
@@ -247,6 +250,7 @@ class MapService {
                     }
                 }
                 l.set('name', layer.get('name'));
+                l.set('displayIcon', layer.get('displayIcon'));
                 return l;
             });
 

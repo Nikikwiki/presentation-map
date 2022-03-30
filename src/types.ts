@@ -14,15 +14,16 @@ export interface Slice {
 }
 
 export interface Layer {
-    type: string,
-    url: string,
-    width: number,
-    fillColor: number[],
-    strokeColor: number[],
-    iconSrc: string,
-    iconSize: number,
-    iconScale: number,
-    cluster: boolean,
-    distance: number,
-    name: string
+    type: string, // тип слоя
+    url: string, // сслыка на слой
+    width: number, // размер рисованой картинки
+    fillColor: number[], // цвет заполнения
+    strokeColor: number[], // цвет обводки
+    iconSrc: string, // ссылка на картинку для отображения на карте
+    iconSize: number, // размер картинки
+    iconScale: number, // масштаб картинки
+    cluster: boolean, // кластеризовать слой
+    distance: number, // дальность кластеризации
+    name: string, // название слоя в легенде
+    displayIcon: string // ссылка на картинку для отображения в легенде
 }

@@ -1,3 +1,17 @@
 .accordion {
     pointer-events: all;
 }
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.lableIcon {
+    width: 16px;
+    height: 16px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
