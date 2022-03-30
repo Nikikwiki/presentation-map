@@ -8,7 +8,9 @@
                 "url": "vector-layer.geojson",
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
-                "strokeColor": [ 255, 255, 255, 1 ]
+                "strokeColor": [ 255, 255, 255, 1 ],
+                "name": "Векторный слой нарисованный",
+                "displayIcon": "icons/blueIcon.png"
             },
             {
                 "type": "tile",
@@ -23,9 +25,11 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
-                "iconSrc": "circle.png",
+                "iconSrc": "icons/circle.png",
                 "iconSize": 1000,
-                "iconScale": 0.02
+                "iconScale": 0.02,
+                "name": "Векторный слой картиночный",
+                "displayIcon": "icons/circle.png"
             }
         ]
     },
@@ -40,7 +44,9 @@
                 "fillColor": [ 255, 160, 0, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
                 "cluster": true,
-                "distance": 25
+                "distance": 25,
+                "name": "Векотрный слой с кластером",
+                "displayIcon": "icons/orangeIcon.png"
             },
             {
                 "type": "tile",
@@ -55,9 +61,11 @@
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
-                "iconSrc": "yellow-circle.png",
+                "iconSrc": "icons/yellow-circle.png",
                 "iconSize": 1000,
-                "iconScale": 0.05
+                "iconScale": 0.05,
+                "name": "Векотрный слой картиночный",
+                "displayIcon": "icons/yellow-circle.png"
             }
         ]
     },
@@ -71,8 +79,8 @@
                 "width": 6,
                 "fillColor": [ 38, 166, 154, 1 ],
                 "strokeColor": [ 255, 249, 196, 1 ],
-                "cluster": true,
-                "distance": 25
+                "name": "Векотрный слой рисованный",
+                "displayIcon": "icons/greenIcon.png"
             },
             {
                 "type": "tile",
@@ -80,7 +88,9 @@
             },
             {
                 "type": "tile",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru"
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru",
+                "name": "Тайловый слой",
+                "displayIcon": "icons/runner.png"
             },
             {
                 "type": "grid",
