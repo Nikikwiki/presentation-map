@@ -40,11 +40,21 @@
 
 .wrapperSlider {
     width: 100%;
-    max-width: 44%;
+    max-width: 54%;
     padding: 14px 24px 24px;
     border-radius: 7px;
     background-color: #fff;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     pointer-events: all;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+@media screen and (max-width: 650px) {
+    .wrapperSlider {
+        max-width: 100%;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
 }
