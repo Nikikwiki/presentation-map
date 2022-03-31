@@ -17,6 +17,8 @@ import { UTFGrid } from 'ol/source';
 import { Group } from 'ol/layer';
 import { useMediaQuery } from 'usehooks-ts';
 import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { mapService } from './map-service';
 import styles from './styles.scss';
 
@@ -189,21 +191,25 @@ export const MapComponent = (props: MapComponentProps) => {
             <div className={styles.map} ref={mapRef}></div>
             <div className={styles.controls}>
                 <div className={styles.topControls}>
-                    <button
+                    <Button
                         type='button'
+                        size='large'
                         className={styles.controlButton}
                         onClick={() =>
                             (showLayerDiff ? hideDiff() : showDiff())}
+                        variant="contained"
                     >
                         Сравнить
-                    </button>
+                    </Button>
                 </div>
                 <div className={styles.midControls}>
                     <div className={styles.zoomControls}>
-                        <button
-                            type="button"
+                        <Button
+                            type='button'
                             title='Zoom in'
-                            className='zoom-controls__button controlButton top'
+                            variant='contained'
+                            size='large'
+                            className='controlButton'
                             onClick={() => {
                                 const zoom = map.getView().getZoom();
                                 if (zoom !== undefined) {
@@ -214,12 +220,14 @@ export const MapComponent = (props: MapComponentProps) => {
                                 }
                             }}
                         >
-                            +
-                        </button>
-                        <button
+                            <AddIcon />
+                        </Button>
+                        <Button
                             type="button"
                             title='Zoom out'
-                            className='zoom-controls__button controlButton bottom'
+                            className='controlButton'
+                            size='large'
+                            variant='contained'
                             onClick={() => {
                                 const zoom = map.getView().getZoom();
                                 if (zoom !== undefined) {
@@ -230,8 +238,8 @@ export const MapComponent = (props: MapComponentProps) => {
                                 }
                             }}
                         >
-                            –
-                        </button>
+                            <RemoveIcon />
+                        </Button>
                     </div>
                 </div>
                 <div className={styles.bottomControls}>
@@ -248,7 +256,8 @@ export const MapComponent = (props: MapComponentProps) => {
                                     : (
                                         <Button
                                             variant="contained"
-                                            className={styles.buttonR}
+                                            size='large'
+                                            className={styles.controlButton}
                                         >
                                             Легенда
                                         </Button>
@@ -265,8 +274,9 @@ export const MapComponent = (props: MapComponentProps) => {
                                         />
                                     ) : (
                                         <Button
+                                            size='large'
                                             variant="contained"
-                                            className={styles.buttonR}
+                                            className={styles.controlButton}
                                         >
                                             Легенда
                                         </Button>

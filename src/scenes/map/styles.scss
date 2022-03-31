@@ -30,39 +30,19 @@
     }
 }
 
-.zoom-controls {
+.zoomControls {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
 
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
 
-    .zoom-controls__button {
-        width: 45px;
+    button {
+        min-width: 45px !important;
+        width: 45px !important;
         height: 45px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        pointer-events: all;
-        cursor: pointer;
-
-        font-size: 30px;
-        font-weight: 100;
     }
-
-    .top {
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
-    .bottom {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-    }
-
 }
 
 .bottomControls {
@@ -131,29 +111,7 @@
 }
 
 .controlButton {
-    border-radius: 7px;
-    background: #3758FF;
-    border: none;
-    color: #fff;
-    cursor: pointer;
     pointer-events: all;
-    padding: 12px;
-    font-weight: bold;
-
-    &:hover {
-        background: linear-gradient(180deg, #1F8CEB 0%, #3758FF 100%);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2) !important;
-    }
-
-    &:active {
-        background-color: #3758FF !important;
-        box-shadow: none !important;
-    }
-
-    &:focus {
-        background-color: #3758FF;
-        box-shadow: none;
-    }
 }
 
 .ol-swipe {
@@ -192,8 +150,4 @@
 
 .ol-swipe:after {
     left: 52%;
-}
-
-.buttonR {
-    pointer-events: all;
 }

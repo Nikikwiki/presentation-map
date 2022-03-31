@@ -59,37 +59,3 @@ textarea {
         background-color: transparent;
     }
 }
-
-button {
-    cursor: pointer;
-
-    color: inherit;
-
-    font-size: 14px;
-    font-family: 'Roboto', Helvetica, sans-serif;
-
-
-    outline: none;
-    border: none;
-    background-color: transparent;
-
-    &[disabled] {
-
-        &:focus,
-        &:hover,
-        &:active {
-            cursor: default;
-        }
-
-    }
-
-    &:focus,
-    &:hover,
-    &:active {
-        cursor: pointer;
-
-        outline: none;
-        border: none;
-        background-color: transparent;
-    }
-}
