@@ -15,6 +15,8 @@ import { AccordionComponent } from 'components';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { UTFGrid } from 'ol/source';
 import { Group } from 'ol/layer';
+import { useMediaQuery } from 'usehooks-ts';
+import { Button } from '@mui/material';
 import { mapService } from './map-service';
 import styles from './styles.scss';
 
@@ -33,6 +35,8 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ swipeLayerNumber, setSwipeLayerNumber ] = useState<number>(0);
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
+
+    const mediaMatches = useMediaQuery('(min-width: 650px)');
 
     const swipeControl = useRef(new Swipe());
 
@@ -233,20 +237,41 @@ export const MapComponent = (props: MapComponentProps) => {
                 <div className={styles.bottomControls}>
                     <div className={styles.accodrionWrapper}>
                         <div className={styles.accordionLeft}>
-                            <AccordionComponent
-                                layerGroup={layerGroups[sliderLayerNumber]}
-                                sideGroups={layerGroups}
-                            />
+                            {
+                                mediaMatches
+                                    ? (
+                                        <AccordionComponent
+                                            layerGroup={layerGroups[sliderLayerNumber]}
+                                            sideGroups={layerGroups}
+                                        />
+                                    )
+                                    : (
+                                        <Button
+                                            variant="contained"
+                                            className={styles.buttonR}
+                                        >
+                                            Легенда
+                                        </Button>
+                                    )
+                            }
                         </div>
                         <div className={styles.accordionRight}>
                             {
-                                showLayerDiff
-                                    ? (
+                                showLayerDiff && (
+                                    mediaMatches ? (
                                         <AccordionComponent
                                             layerGroup={copyLayerGroups[swipeLayerNumber]}
                                             sideGroups={copyLayerGroups}
                                         />
-                                    ) : null
+                                    ) : (
+                                        <Button
+                                            variant="contained"
+                                            className={styles.buttonR}
+                                        >
+                                            Легенда
+                                        </Button>
+                                    )
+                                )
 
                             }
                         </div>
@@ -257,14 +282,12 @@ export const MapComponent = (props: MapComponentProps) => {
                             slices={slices}
                         />
                         {
-                            showLayerDiff
-                                ? (
-                                    <DateSlider
-                                        onChange={handleRightLayerChange}
-                                        slices={slices}
-                                    />
-                                ) : null
-
+                            showLayerDiff && (
+                                <DateSlider
+                                    onChange={handleRightLayerChange}
+                                    slices={slices}
+                                />
+                            )
                         }
                     </div>
                 </div>
