@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ProSidebar, SidebarHeader, SidebarContent } from 'react-pro-sidebar';
-import { Icons } from 'components/icons';
+import { Divider, Drawer, IconButton } from '@mui/material';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
 import styles from './styles.scss';
 
 export const Sidebar = (props: any) => {
@@ -54,31 +55,43 @@ export const Sidebar = (props: any) => {
         }
     };
 
+    const renderHeader = () => {
+        return (
+            <div className={styles.header}>
+                <p className={styles.headerText}>
+                    {feature?.mr}
+                </p>
+                <IconButton
+                    aria-label='close'
+                    color='primary'
+                    onClick={() => hideSidebar()}
+                    size='large'
+                >
+                    <ChevronLeftIcon />
+                </IconButton>
+            </div>
+        );
+    };
+
     return (
-        <div className={styles.sidebarWrapper}>
-            <ProSidebar
-                className={styles.sidebar}
-                collapsed={sidebarCollapse}
-                collapsedWidth='0px'
-            >
-                <SidebarHeader className={styles.header}>
-                    <p className={styles.headerText}>
-                        {feature?.mr}
-                    </p>
-                    <button
-                        className={styles.headerButton}
-                        type='button'
-                        onClick={() => hideSidebar()}
-                    >
-                        <Icons.IconClose className={styles.icon} />
-                    </button>
-                </SidebarHeader>
-                <SidebarContent>
-                    {
-                        renderContent()
-                    }
-                </SidebarContent>
-            </ProSidebar>
-        </div>
+        <Drawer
+            anchor='left'
+            open={!sidebarCollapse}
+            variant="persistent"
+            sx={{
+                width: '20vw',
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: '20vw',
+                    boxSizing: 'border-box'
+                }
+            }}
+        >
+            {renderHeader()}
+            <Divider />
+            <div className={styles.body}>
+                {renderContent()}
+            </div>
+        </Drawer>
     );
 };
