@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import OlMap from 'ol/Map';
 
-import 'rc-slider/assets/index.css';
 import { MapConfig, Slice } from 'types';
 import { DateSlider } from 'components/date-slider';
 import LayerGroup from 'ol/layer/Group';
 
 import 'ol-ext/dist/ol-ext.css';
+import 'react-pro-sidebar/dist/css/styles.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
@@ -282,7 +282,6 @@ export const MapComponent = (props: MapComponentProps) => {
                                         </Button>
                                     )
                                 )
-
                             }
                         </div>
                     </div>

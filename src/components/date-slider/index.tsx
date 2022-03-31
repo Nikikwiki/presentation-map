@@ -1,7 +1,6 @@
-import Slider, { SliderTooltip } from 'rc-slider';
-import React, { useRef, useState } from 'react';
+import Slider from '@mui/material/Slider';
+import React, { useState } from 'react';
 import { Slice } from 'types';
-import 'react-pro-sidebar/dist/css/styles.css';
 import moment from 'moment';
 import styles from './styles.scss';
 
@@ -12,43 +11,34 @@ interface DateSliderProps {
 
 export const DateSlider = (props: DateSliderProps) => {
     const { slices, onChange } = props;
-    const { Handle } = Slider;
-    const sliderRef = useRef<any>();
 
     const [ layerDate, setLayerDate ] = useState(0);
 
-    const marks = Object.fromEntries(slices.map((slice, i) => {
-        return [ i, <div className={styles.sliderSpan}>{moment(slice.date).format('YYYY')}</div> ];
-    }));
+    const marks = slices.map((slice, i) => {
+        return { label: moment(slice.date).format('YYYY'),
+            value: i };
+    });
 
     const handleChange = (value: number) => {
         onChange(value);
         setLayerDate(value);
     };
 
-    const handle = ({ value, dragging, index, ...restProps }: any) => {
-        let currentDate = '';
-        slices.forEach((slice, i) => {
-            if (value === i) currentDate = slice.date;
-        });
-        return (
-            <SliderTooltip
-                prefixCls="rc-slider-tooltip"
-                overlay={moment(currentDate).format('DD.MM.YYYY')}
-                visible={dragging}
-                placement="top"
-                key={index}
-            >
-                <Handle value={value} {...restProps} />
-            </SliderTooltip>
-        );
+    const handleOnChange = (e: Event, value: any) => {
+        onChange(value);
+        setLayerDate(value);
+    };
+
+    const lableChange = (value: number) => {
+        const slice = slices.find((_, i) => i === value);
+        return slice ? `${moment(slice.date).format('DD.MM.YYYY')}` : '';
     };
 
     const selectClosestMark = (e: React.MouseEvent<HTMLElement>) => {
         const clickedArea = e.clientX;
+
         const markElementsArray = e.currentTarget.children[0]
-            .getElementsByClassName('rc-slider-mark')[0]
-            .getElementsByClassName('rc-slider-mark-text');
+            .getElementsByClassName('MuiSlider-markLabel');
 
         let middlesArray = [];
 
@@ -84,15 +74,14 @@ export const DateSlider = (props: DateSliderProps) => {
             tabIndex={0}
         >
             <Slider
-                dots
+                aria-label='slices'
+                marks={marks}
+                value={layerDate}
                 min={0}
                 max={slices.length - 1}
-                value={layerDate}
-                onChange={handleChange}
-                handle={handle}
-                className={styles.slider}
-                marks={marks}
-                ref={sliderRef}
+                onChange={(e, value) => handleOnChange(e, value)}
+                valueLabelFormat={lableChange}
+                valueLabelDisplay="auto"
             />
         </div>
     );
