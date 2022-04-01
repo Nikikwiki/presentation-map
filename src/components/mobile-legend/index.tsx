@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Checkbox, Divider, Drawer, FormControlLabel, FormGroup, IconButton
@@ -22,6 +22,20 @@ export const MobileLegend = (props: MobileLegendProps) => {
     const hideSidebar = () => {
         setShowLegend(false);
     };
+
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                hideSidebar();
+            }
+        };
+
+        document.addEventListener('keydown', listener);
+
+        return () => {
+            document.removeEventListener('keydown', listener);
+        };
+    }, []);
 
     const checkLayer = (e: any, layer: any) => {
         const sharedId = layer.get('sharedId');

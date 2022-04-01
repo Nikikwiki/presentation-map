@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Divider, Drawer, IconButton } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import CloseIcon from '@mui/icons-material/Close';
 
 import styles from './styles.scss';
 
-export const Sidebar = (props: any) => {
-    const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
-
+export const MobileFeature = (props: any) => {
     const { feature, onClose } = props;
+    const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
 
     useEffect(() => {
         if (feature) {
@@ -55,45 +54,29 @@ export const Sidebar = (props: any) => {
         }
     };
 
-    const renderHeader = () => {
-        return (
-            <div className={styles.header}>
-                <p className={styles.headerText}>
-                    {feature?.mr}
-                </p>
-                <IconButton
-                    aria-label='close'
-                    color='primary'
-                    onClick={() => hideSidebar()}
-                    size='large'
-                >
-                    <ChevronLeftIcon />
-                </IconButton>
-            </div>
-        );
-    };
-
     return (
-        <Drawer
-            anchor='left'
-            open={!sidebarCollapse}
-            variant="persistent"
-            sx={{
-                width: '20vw',
-                minWidth: '260px',
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                    width: '20vw',
-                    minWidth: '260px',
-                    boxSizing: 'border-box'
-                }
-            }}
-        >
-            {renderHeader()}
-            <Divider />
-            <div className={styles.body}>
-                {renderContent()}
-            </div>
-        </Drawer>
+        <div className={styles.controlButton}>
+            <Drawer
+                anchor='bottom'
+                open={!sidebarCollapse}
+                variant="persistent"
+            >
+                <div className='header'>
+                    <strong>{feature?.mr}</strong>
+                    <IconButton
+                        aria-label='close'
+                        color='primary'
+                        onClick={() => hideSidebar()}
+                        size='large'
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </div>
+                <Divider />
+                <div className={styles.body}>
+                    {renderContent()}
+                </div>
+            </Drawer>
+        </div>
     );
 };

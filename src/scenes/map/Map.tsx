@@ -11,7 +11,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
-import { AccordionComponent, MobileLegend } from 'components';
+import { AccordionComponent, MobileFeature, MobileLegend } from 'components';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { UTFGrid } from 'ol/source';
 import { Group } from 'ol/layer';
@@ -299,19 +299,26 @@ export const MapComponent = (props: MapComponentProps) => {
                     </div>
                 </div>
             </div>
-            <Sidebar
-                feature={clickedFeature}
-                onClose={() => {
-                    setClickedFeature(null);
-                }}
-            />
-            {/* <MobileLegend
-                layerGroup={leftMobileLegend?.layerGroup}
-                sideGroups={leftMobileLegend?.sideGroups}
-                onClose={() => {
-                    setLeftMobileLegend(null);
-                }}
-            /> */}
+            {
+                mediaMatches
+                    ? (
+                        <Sidebar
+                            feature={clickedFeature}
+                            onClose={() => {
+                                setClickedFeature(null);
+                            }}
+                        />
+                    )
+                    : (
+                        <MobileFeature
+                            feature={clickedFeature}
+                            onClose={() => {
+                                setClickedFeature(null);
+                            }}
+                        />
+                    )
+
+            }
         </div>
     );
 };
