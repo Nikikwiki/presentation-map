@@ -11,7 +11,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import Swipe from 'ol-ext/control/Swipe';
 
 import { Sidebar } from 'components/sidebar';
-import { AccordionComponent } from 'components';
+import { AccordionComponent, MobileLegend } from 'components';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { UTFGrid } from 'ol/source';
 import { Group } from 'ol/layer';
@@ -37,6 +37,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ swipeLayerNumber, setSwipeLayerNumber ] = useState<number>(0);
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
+    const [ leftMobileLegend, setLeftMobileLegend ] = useState<any>(null);
 
     const mediaMatches = useMediaQuery('(min-width: 650px)');
 
@@ -191,16 +192,20 @@ export const MapComponent = (props: MapComponentProps) => {
             <div className={styles.map} ref={mapRef}></div>
             <div className={styles.controls}>
                 <div className={styles.topControls}>
-                    <Button
-                        type='button'
-                        size='large'
-                        className={styles.controlButton}
-                        onClick={() =>
-                            (showLayerDiff ? hideDiff() : showDiff())}
-                        variant="contained"
-                    >
-                        Сравнить
-                    </Button>
+                    {
+                        mapConfig.hasCompare && (
+                            <Button
+                                type='button'
+                                size='large'
+                                className={styles.controlButton}
+                                onClick={() =>
+                                    (showLayerDiff ? hideDiff() : showDiff())}
+                                variant="contained"
+                            >
+                                Сравнить
+                            </Button>
+                        )
+                    }
                 </div>
                 <div className={styles.midControls}>
                     <div className={styles.zoomControls}>
@@ -254,13 +259,10 @@ export const MapComponent = (props: MapComponentProps) => {
                                         />
                                     )
                                     : (
-                                        <Button
-                                            variant="contained"
-                                            size='large'
-                                            className={styles.controlButton}
-                                        >
-                                            Легенда
-                                        </Button>
+                                        <MobileLegend
+                                            layerGroup={layerGroups[sliderLayerNumber]}
+                                            sideGroups={layerGroups}
+                                        />
                                     )
                             }
                         </div>
@@ -307,6 +309,13 @@ export const MapComponent = (props: MapComponentProps) => {
                     setClickedFeature(null);
                 }}
             />
+            {/* <MobileLegend
+                layerGroup={leftMobileLegend?.layerGroup}
+                sideGroups={leftMobileLegend?.sideGroups}
+                onClose={() => {
+                    setLeftMobileLegend(null);
+                }}
+            /> */}
         </div>
     );
 };

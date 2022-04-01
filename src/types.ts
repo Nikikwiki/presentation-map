@@ -1,9 +1,10 @@
 export interface MapConfig {
-    center: number[],
+    center: number[], // центрирование карты
     zoom: number,
     minZoom: number,
     maxZoom: number,
-    extent: number[],
+    extent: number[], // границы показа карты
+    hasCompare: boolean // вкл/выкл сравнения
 }
 
 export interface Slice {

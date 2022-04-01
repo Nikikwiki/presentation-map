@@ -11,7 +11,8 @@ export const RootScene: React.FC<any> = (): JSX.Element => {
             zoom: 0,
             minZoom: 0,
             maxZoom: 0,
-            extent: []
+            extent: [],
+            hasCompare: false
         }
     );
 
