@@ -15,6 +15,7 @@ interface MobileLegendProps {
 
 export const MobileLegend = (props: MobileLegendProps) => {
     const [ showLegend, setShowLegend ] = useState(false);
+    const [ render, setRender ] = useState({});
 
     const { layerGroup, sideGroups } = props;
 
@@ -44,7 +45,7 @@ export const MobileLegend = (props: MobileLegendProps) => {
             });
         }
 
-        setShowLegend(true);
+        setRender({});
     };
 
     const renderContent = () => {

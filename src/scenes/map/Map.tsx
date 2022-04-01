@@ -37,7 +37,6 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ swipeLayerNumber, setSwipeLayerNumber ] = useState<number>(0);
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
-    const [ leftMobileLegend, setLeftMobileLegend ] = useState<any>(null);
 
     const mediaMatches = useMediaQuery('(min-width: 650px)');
 
@@ -275,13 +274,10 @@ export const MapComponent = (props: MapComponentProps) => {
                                             sideGroups={copyLayerGroups}
                                         />
                                     ) : (
-                                        <Button
-                                            size='large'
-                                            variant="contained"
-                                            className={styles.controlButton}
-                                        >
-                                            Легенда
-                                        </Button>
+                                        <MobileLegend
+                                            layerGroup={copyLayerGroups[swipeLayerNumber]}
+                                            sideGroups={copyLayerGroups}
+                                        />
                                     )
                                 )
                             }
