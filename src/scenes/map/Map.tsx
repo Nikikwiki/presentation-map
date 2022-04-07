@@ -192,7 +192,7 @@ export const MapComponent = (props: MapComponentProps) => {
             <div className={styles.controls}>
                 <div className={styles.topControls}>
                     {
-                        mapConfig.hasCompare && (
+                        (mapConfig.hasCompare && slices.length > 1) && (
                             <Button
                                 type='button'
                                 size='large'
@@ -283,20 +283,25 @@ export const MapComponent = (props: MapComponentProps) => {
                             }
                         </div>
                     </div>
-                    <div className={styles.sliderWrapper}>
-                        <DateSlider
-                            onChange={handleLeftLayerChange}
-                            slices={slices}
-                        />
-                        {
-                            showLayerDiff && (
-                                <DateSlider
-                                    onChange={handleRightLayerChange}
-                                    slices={slices}
-                                />
+                    {
+                        slices.length > 1
+                            && (
+                                <div className={styles.sliderWrapper}>
+                                    <DateSlider
+                                        onChange={handleLeftLayerChange}
+                                        slices={slices}
+                                    />
+                                    {
+                                        showLayerDiff && (
+                                            <DateSlider
+                                                onChange={handleRightLayerChange}
+                                                slices={slices}
+                                            />
+                                        )
+                                    }
+                                </div>
                             )
-                        }
-                    </div>
+                    }
                 </div>
             </div>
             {
