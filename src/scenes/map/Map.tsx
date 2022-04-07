@@ -123,12 +123,6 @@ export const MapComponent = (props: MapComponentProps) => {
                     }));
                 }
             } else {
-            // TODO почекать чот не то
-                setClickedObject((prev: any) => ({
-                    ...prev,
-                    layer,
-                    featureProps: null
-                }));
                 if (!showLayerDiff) {
                     clickOnUTFGrid(layerGroups[sliderLayerNumber], e);
                 } else {
