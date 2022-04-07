@@ -5,11 +5,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import styles from './styles.scss';
 
 export const MobileFeature = (props: any) => {
-    const { feature, onClose } = props;
+    const { clickedObject, onClose } = props;
     const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
 
     useEffect(() => {
-        if (feature) {
+        if (clickedObject.featureProps) {
             setSidebarCollapse(false);
         } else {
             setSidebarCollapse(true);
@@ -36,8 +36,8 @@ export const MobileFeature = (props: any) => {
     }, []);
 
     const renderContent = () => {
-        if (feature) {
-            return Object.entries(feature).map(([ key, value ], i) => {
+        if (clickedObject.featureProps) {
+            return Object.entries(clickedObject.featureProps).map(([ key, value ], i) => {
                 if (typeof (value) === 'string') {
                     return (
                         <div key={i.toString()} className={styles.contentBlock}>
@@ -62,7 +62,7 @@ export const MobileFeature = (props: any) => {
                 variant="persistent"
             >
                 <div className='header'>
-                    <strong>{feature?.mr}</strong>
+                    <strong>{clickedObject.layer?.get('name')}</strong>
                     <IconButton
                         aria-label='close'
                         color='primary'

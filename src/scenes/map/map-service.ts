@@ -129,6 +129,7 @@ class MapService {
                 utfGrid.set('url', layer.url);
                 utfGrid.set('displayIcon', layer.displayIcon);
                 utfGrid.set('sharedId', layer.sharedId);
+                utfGrid.set('name', layer.name);
                 const a = new TileLayer({
                     source: utfGrid
                 });

@@ -7,10 +7,10 @@ import styles from './styles.scss';
 export const Sidebar = (props: any) => {
     const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
 
-    const { feature, onClose } = props;
+    const { clickedObject, onClose } = props;
 
     useEffect(() => {
-        if (feature) {
+        if (clickedObject.featureProps) {
             setSidebarCollapse(false);
         } else {
             setSidebarCollapse(true);
@@ -37,8 +37,8 @@ export const Sidebar = (props: any) => {
     }, []);
 
     const renderContent = () => {
-        if (feature) {
-            return Object.entries(feature).map(([ key, value ], i) => {
+        if (clickedObject.featureProps) {
+            return Object.entries(clickedObject.featureProps).map(([ key, value ], i) => {
                 if (typeof (value) === 'string') {
                     return (
                         <div key={i.toString()} className={styles.contentBlock}>
@@ -59,7 +59,7 @@ export const Sidebar = (props: any) => {
         return (
             <div className={styles.header}>
                 <p className={styles.headerText}>
-                    {feature?.mr}
+                    {clickedObject.layer.get('name')}
                 </p>
                 <IconButton
                     aria-label='close'
@@ -89,10 +89,10 @@ export const Sidebar = (props: any) => {
                 }
             }}
         >
-            {renderHeader()}
+            {clickedObject.featureProps && renderHeader()}
             <Divider />
             <div className={styles.body}>
-                {renderContent()}
+                {clickedObject.featureProps && renderContent()}
             </div>
         </Drawer>
     );

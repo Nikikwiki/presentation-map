@@ -34,6 +34,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ layerGroups, setLayerGroups ] = useState<LayerGroup[]>([]);
     const [ copyLayerGroups, setCopyLayerGroups ] = useState<LayerGroup[]>([]);
     const [ clickedFeature, setClickedFeature ] = useState<any>(null);
+    const [ clickedObject, setClickedObject ] = useState<any>({ featureProps: null, layer: null });
     const [ swipeLayerNumber, setSwipeLayerNumber ] = useState<number>(0);
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
@@ -58,8 +59,18 @@ export const MapComponent = (props: MapComponentProps) => {
                 layer.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
                     (data: any) => {
                         if (data !== null && data !== '') {
-                            setClickedFeature(data);
-                        } else setClickedFeature(null);
+                            setClickedObject((prev: any) => ({
+                                ...prev,
+                                layer: layer.getSource(),
+                                featureProps: data
+                            }));
+                        } else {
+                            setClickedObject((prev: any) => ({
+                                ...prev,
+                                layer: layer.getSource(),
+                                featureProps: null
+                            }));
+                        }
                     });
             }
         });
@@ -80,29 +91,48 @@ export const MapComponent = (props: MapComponentProps) => {
 
     useEffect(() => {
         const clickListener = (e: MapBrowserEvent<any>) => {
-            const feature = map.forEachFeatureAtPixel(e.pixel, (f) => {
-                return f;
+            const featureLayer: any = map.forEachFeatureAtPixel(e.pixel, (f, l) => {
+                return { f, l };
             });
+            const feature = featureLayer?.f;
+            const layer = featureLayer?.l;
+
             // TODO реализовать логику отображения кластера
             if (feature) {
                 if (feature.getProperties().features) {
                     if (feature.getProperties().features.length === 1) {
-                        setClickedFeature(feature.getProperties().features[0]);
+                        setClickedObject((prev: any) => ({
+                            ...prev,
+                            layer,
+                            featureProps: feature.getProperties().features[0]
+                        }));
                     } else {
-                        setClickedFeature({
-                            type: 'это кластер'
-                        });
+                        setClickedObject((prev: any) => ({
+                            ...prev,
+                            layer,
+                            featureProps: {
+                                type: 'это кластер'
+                            }
+                        }));
                     }
                 } else {
-                    setClickedFeature(feature.getProperties());
+                    setClickedObject((prev: any) => ({
+                        ...prev,
+                        layer,
+                        featureProps: feature.getProperties()
+                    }));
                 }
             } else {
-                setClickedFeature(null);
+            // TODO почекать чот не то
+                setClickedObject((prev: any) => ({
+                    ...prev,
+                    layer,
+                    featureProps: null
+                }));
                 if (!showLayerDiff) {
                     clickOnUTFGrid(layerGroups[sliderLayerNumber], e);
                 } else {
-                    const { left } = document.querySelectorAll('.ol-swipe')[0].getBoundingClientRect();
-                    if (e.pixel[0] < left) {
+                    if (e.pixel[0] < document.querySelectorAll('.ol-swipe')[0].getBoundingClientRect().left) {
                         clickOnUTFGrid(layerGroups[sliderLayerNumber], e);
                     } else {
                         clickOnUTFGrid(copyLayerGroups[swipeLayerNumber], e);
@@ -308,17 +338,23 @@ export const MapComponent = (props: MapComponentProps) => {
                 mediaMatches
                     ? (
                         <Sidebar
-                            feature={clickedFeature}
+                            clickedObject={clickedObject}
                             onClose={() => {
-                                setClickedFeature(null);
+                                setClickedObject((prev: any) => ({
+                                    ...prev,
+                                    featureProps: null
+                                }));
                             }}
                         />
                     )
                     : (
                         <MobileFeature
-                            feature={clickedFeature}
+                            clickedObject={clickedObject}
                             onClose={() => {
-                                setClickedFeature(null);
+                                setClickedObject((prev: any) => ({
+                                    ...prev,
+                                    featureProps: null
+                                }));
                             }}
                         />
                     )
