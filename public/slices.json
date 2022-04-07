@@ -9,6 +9,7 @@
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
+                "strokeWidth": 3,
                 "name": "Векторный слой нарисованный",
                 "displayIcon": "icons/blueIcon.png",
                 "sharedId": "1"
@@ -44,6 +45,7 @@
                 "width": 7,
                 "fillColor": [ 255, 160, 0, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
+                "strokeWidth": 3.5,
                 "cluster": true,
                 "distance": 25,
                 "name": "Векотрный слой с кластером",
@@ -80,6 +82,7 @@
                 "width": 6,
                 "fillColor": [ 38, 166, 154, 1 ],
                 "strokeColor": [ 255, 249, 196, 1 ],
+                "strokeWidth": 3,
                 "name": "Векотрный слой рисованный",
                 "displayIcon": "icons/greenIcon.png"
             },
@@ -109,6 +112,7 @@
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
+                "strokeWidth": 3,
                 "name": "Векторный слой нарисованный",
                 "displayIcon": "icons/blueIcon.png",
                 "sharedId": "1"

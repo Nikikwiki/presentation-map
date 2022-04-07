@@ -1,6 +1,6 @@
 import OlMap from 'ol/Map';
 import axios, { AxiosResponse } from 'axios';
-import { Layer, Slice, MapConfig } from 'types';
+import { Layer, Slice, MapConfig, LayerWithUrl } from 'types';
 import { Group as LayerGroup, Tile as TileLayer } from 'ol/layer';
 import VectorLayer from 'ol/layer/Vector';
 import { Cluster, OSM, UTFGrid } from 'ol/source';
@@ -79,7 +79,7 @@ class MapService {
 
             const gridTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'grid');
 
-            const featureConfig = [];
+            const featureConfig: LayerWithUrl[] = [];
 
             for (let layer of vectorTypedLayers) {
                 // eslint-disable-next-line no-await-in-loop
@@ -150,7 +150,7 @@ class MapService {
         return groups;
     }
 
-    private getFeatureStyles(layer: any) {
+    private getFeatureStyles(layer: LayerWithUrl) {
         let styles;
         if (layer.iconSrc) {
             styles = new Style({
@@ -161,7 +161,7 @@ class MapService {
                 })
             });
         } else {
-            styles = this.generateStyles(layer.strokeColor, layer.fillColor, layer.width);
+            styles = this.generateStyles(layer.strokeColor, layer.strokeWidth, layer.fillColor, layer.width);
         }
         return styles;
     }
@@ -191,7 +191,7 @@ class MapService {
         return axios.get(url);
     }
 
-    private generateStyles(strokeColor: number[], fillColor: number[], width: number) {
+    private generateStyles(strokeColor: number[], strokeWidth: number, fillColor: number[], width: number) {
         return new Style({
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({
@@ -203,7 +203,7 @@ class MapService {
                 fill: new Fill({ color: fillColor }),
                 stroke: new Stroke({
                     color: strokeColor,
-                    width: width / 2
+                    width: strokeWidth
                 })
             })
         });

@@ -20,6 +20,7 @@ export interface Layer {
     width: number, // размер рисованой картинки
     fillColor: number[], // цвет заполнения
     strokeColor: number[], // цвет обводки
+    strokeWidth: number, // толщина обводкии
     iconSrc: string, // ссылка на картинку для отображения на карте
     iconSize: number, // размер картинки
     iconScale: number, // масштаб картинки
@@ -28,4 +29,8 @@ export interface Layer {
     name: string, // название слоя в легенде
     displayIcon: string, // ссылка на картинку для отображения в легенде
     sharedId: string // общий ID слоев для скрытия
+}
+
+export interface LayerWithUrl extends Layer {
+    layerByUrl: any
 }
