@@ -9,6 +9,7 @@ import LayerGroup from 'ol/layer/Group';
 import 'ol-ext/dist/ol-ext.css';
 import 'react-pro-sidebar/dist/css/styles.css';
 import Swipe from 'ol-ext/control/Swipe';
+import { boundingExtent } from 'ol/extent';
 
 import { Sidebar } from 'components/sidebar';
 import { AccordionComponent, MobileFeature, MobileLegend } from 'components';
@@ -106,6 +107,10 @@ export const MapComponent = (props: MapComponentProps) => {
                 cluster: []
             }));
         } else {
+            const extent = boundingExtent(
+                features.map((r) => r.getGeometry().getCoordinates())
+            );
+            map.getView().fit(extent, { duration: 1000, padding: [ 50, 50, 50, 50 ] });
             setClickedObject((prev: any) => ({
                 ...prev,
                 layer,

@@ -70,7 +70,12 @@
                 "name": "Векотрный слой картиночный",
                 "displayIcon": "icons/yellow-circle.png",
                 "cluster": true,
-                "distance": 50
+                "distance": 50,
+                "text": true,
+                "fillText": "#000",
+                "offsetXText": 10,
+                "offsetYText": 10,
+                "scaleText": 1.2
             }
         ]
     },

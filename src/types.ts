@@ -29,6 +29,11 @@ export interface Layer {
     name: string, // название слоя в легенде
     displayIcon: string, // ссылка на картинку для отображения в легенде
     sharedId: string // общий ID слоев для скрытия
+    text: boolean // подпись к кластеру
+    fillText: string, // цвет текста подписи
+    offsetXText: number // смещение текста относительно иконки по Х
+    offsetYText: number // смещение текста относительно иконки по Y
+    scaleText: number // размер текста
 }
 
 export interface LayerWithUrl extends Layer {

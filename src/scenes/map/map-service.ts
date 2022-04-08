@@ -7,7 +7,7 @@ import { Cluster, OSM, UTFGrid } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import {
-    Circle, Fill, Stroke, Style, Icon
+    Circle, Fill, Stroke, Style, Icon, Text
 } from 'ol/style';
 import { View } from 'ol';
 import * as olControl from 'ol/control';
@@ -90,12 +90,20 @@ class MapService {
 
             const vectorLayers = [];
 
+            const styleCache: any = {};
             for (let layer of featureConfig) {
-                const styles = this.getFeatureStyles(layer);
+                // const styles = this.getFeatureStyles(layer);
                 const source = this.getFeatureSource(layer);
                 const vectorLayer = new VectorLayer({
                     source: source,
-                    style: styles
+                    style: (feature) => {
+                        const size = feature.get('features')?.length;
+                        let styles = styleCache[size];
+                        if (!styles) {
+                            styles = this.getFeatureStyles(layer, size);
+                        }
+                        return styles;
+                    }
                 });
                 vectorLayer.set('name', layer.name);
                 vectorLayer.set('displayIcon', layer.displayIcon);
@@ -151,7 +159,9 @@ class MapService {
         return groups;
     }
 
-    private getFeatureStyles(layer: LayerWithUrl) {
+    private getFeatureStyles(layer: LayerWithUrl, size: any) {
+        // eslint-disable-next-line no-param-reassign
+        size = size > 1 && layer.text ? size : null;
         let styles;
         if (layer.iconSrc) {
             styles = new Style({
@@ -159,10 +169,19 @@ class MapService {
                     src: layer.iconSrc,
                     size: [ layer.iconSize, layer.iconSize ],
                     scale: layer.iconScale
+                }),
+                text: new Text({
+                    text: size?.toString(),
+                    fill: new Fill({
+                        color: layer.fillText
+                    }),
+                    offsetX: layer.offsetXText,
+                    offsetY: layer.offsetYText,
+                    scale: layer.scaleText
                 })
             });
         } else {
-            styles = this.generateStyles(layer.strokeColor, layer.strokeWidth, layer.fillColor, layer.width);
+            styles = this.generateStyles(layer, size);
         }
         return styles;
     }
@@ -192,7 +211,8 @@ class MapService {
         return axios.get(url);
     }
 
-    private generateStyles(strokeColor: number[], strokeWidth: number, fillColor: number[], width: number) {
+    private generateStyles(layer: LayerWithUrl, size: number) {
+        const { strokeColor, strokeWidth, fillColor, width } = layer;
         return new Style({
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({
@@ -206,6 +226,15 @@ class MapService {
                     color: strokeColor,
                     width: strokeWidth
                 })
+            }),
+            text: new Text({
+                text: size?.toString(),
+                fill: new Fill({
+                    color: layer.fillText
+                }),
+                offsetX: layer.offsetXText,
+                offsetY: layer.offsetYText,
+                scale: layer.scaleText
             })
         });
     }
