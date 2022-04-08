@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Drawer, IconButton } from '@mui/material';
+import { Button, Divider, Drawer, IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import styles from './styles.scss';
@@ -7,10 +7,10 @@ import styles from './styles.scss';
 export const Sidebar = (props: any) => {
     const [ sidebarCollapse, setSidebarCollapse ] = useState<boolean>(true);
 
-    const { clickedObject, onClose } = props;
+    const { clickedObject, onClose, zoomToObject } = props;
 
     useEffect(() => {
-        if (clickedObject.featureProps) {
+        if (clickedObject.featureProps || clickedObject.cluster.length) {
             setSidebarCollapse(false);
         } else {
             setSidebarCollapse(true);
@@ -46,13 +46,34 @@ export const Sidebar = (props: any) => {
                             <div className={styles.contentStyle}>{value}</div>
                         </div>
                     );
-                } else {
-                    return null;
-                }
+                } else return null;
             });
         } else {
             return null;
         }
+    };
+
+    const renderClusterContent = () => {
+        if (clickedObject.cluster.length) {
+            return clickedObject.cluster.map((feature: any, i: number) => {
+                return (
+                    <div
+                        key={i.toString()}
+                    >
+                        <Button
+                            variant='text'
+                            className={styles.clusterBlock}
+                            onClick={() => zoomToObject(feature)}
+                        >
+                            {feature.getProperties()?.title}
+                            <br />
+                            {feature.getProperties()?.string}
+                        </Button>
+                        <Divider />
+                    </div>
+                );
+            });
+        } else return null;
     };
 
     const renderHeader = () => {
@@ -89,11 +110,22 @@ export const Sidebar = (props: any) => {
                 }
             }}
         >
-            {clickedObject.featureProps && renderHeader()}
+            {(clickedObject.featureProps || clickedObject.cluster.length) && renderHeader()}
             <Divider />
-            <div className={styles.body}>
-                {clickedObject.featureProps && renderContent()}
-            </div>
+            {
+                clickedObject.featureProps && (
+                    <div className={styles.body}>
+                        {renderContent()}
+                    </div>
+                )
+            }
+            {
+                clickedObject.cluster.length > 0 && (
+                    <div className={styles.clsuterBody}>
+                        {renderClusterContent()}
+                    </div>
+                )
+            }
         </Drawer>
     );
 };

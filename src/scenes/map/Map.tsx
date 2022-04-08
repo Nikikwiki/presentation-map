@@ -33,8 +33,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ map, setMap ] = useState(new OlMap({}));
     const [ layerGroups, setLayerGroups ] = useState<LayerGroup[]>([]);
     const [ copyLayerGroups, setCopyLayerGroups ] = useState<LayerGroup[]>([]);
-    const [ clickedFeature, setClickedFeature ] = useState<any>(null);
-    const [ clickedObject, setClickedObject ] = useState<any>({ featureProps: null, layer: null });
+    const [ clickedObject, setClickedObject ] = useState<any>({ featureProps: null, layer: null, cluster: [] });
     const [ swipeLayerNumber, setSwipeLayerNumber ] = useState<number>(0);
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
@@ -62,16 +61,25 @@ export const MapComponent = (props: MapComponentProps) => {
                             setClickedObject((prev: any) => ({
                                 ...prev,
                                 layer: layer.getSource(),
-                                featureProps: data
+                                featureProps: data,
+                                cluster: []
                             }));
                         } else {
                             setClickedObject((prev: any) => ({
                                 ...prev,
                                 layer: layer.getSource(),
-                                featureProps: null
+                                featureProps: null,
+                                cluster: []
                             }));
                         }
                     });
+            } else {
+                setClickedObject((prev: any) => ({
+                    ...prev,
+                    layer: layer.getSource(),
+                    featureProps: null,
+                    cluster: []
+                }));
             }
         });
     };
@@ -89,6 +97,24 @@ export const MapComponent = (props: MapComponentProps) => {
         });
     };
 
+    const setCluster = (features: any[], layer: any) => {
+        if (features.length === 1) {
+            setClickedObject((prev: any) => ({
+                ...prev,
+                layer,
+                featureProps: features[0].getProperties(),
+                cluster: []
+            }));
+        } else {
+            setClickedObject((prev: any) => ({
+                ...prev,
+                layer,
+                featureProps: null,
+                cluster: features
+            }));
+        }
+    };
+
     useEffect(() => {
         const clickListener = (e: MapBrowserEvent<any>) => {
             const featureLayer: any = map.forEachFeatureAtPixel(e.pixel, (f, l) => {
@@ -97,29 +123,15 @@ export const MapComponent = (props: MapComponentProps) => {
             const feature = featureLayer?.f;
             const layer = featureLayer?.l;
 
-            // TODO реализовать логику отображения кластера
             if (feature) {
                 if (feature.getProperties().features) {
-                    if (feature.getProperties().features.length === 1) {
-                        setClickedObject((prev: any) => ({
-                            ...prev,
-                            layer,
-                            featureProps: feature.getProperties().features[0]
-                        }));
-                    } else {
-                        setClickedObject((prev: any) => ({
-                            ...prev,
-                            layer,
-                            featureProps: {
-                                type: 'это кластер'
-                            }
-                        }));
-                    }
+                    setCluster(feature.getProperties().features, layer);
                 } else {
                     setClickedObject((prev: any) => ({
                         ...prev,
                         layer,
-                        featureProps: feature.getProperties()
+                        featureProps: feature.getProperties(),
+                        cluster: []
                     }));
                 }
             } else {
@@ -208,6 +220,15 @@ export const MapComponent = (props: MapComponentProps) => {
         });
         setSwipeLayerNumber(0);
         setShowLayerDiff(false);
+    };
+
+    const zoomToObject = (feature: any) => {
+        map.getView().fit(feature.getGeometry().getExtent());
+        setClickedObject((prev: any) => ({
+            ...prev,
+            featureProps: feature.getProperties(),
+            cluster: []
+        }));
     };
 
     return (
@@ -336,9 +357,11 @@ export const MapComponent = (props: MapComponentProps) => {
                             onClose={() => {
                                 setClickedObject((prev: any) => ({
                                     ...prev,
-                                    featureProps: null
+                                    featureProps: null,
+                                    cluster: []
                                 }));
                             }}
+                            zoomToObject={(feature: any) => zoomToObject(feature)}
                         />
                     )
                     : (
@@ -347,7 +370,8 @@ export const MapComponent = (props: MapComponentProps) => {
                             onClose={() => {
                                 setClickedObject((prev: any) => ({
                                     ...prev,
-                                    featureProps: null
+                                    featureProps: null,
+                                    cluster: []
                                 }));
                             }}
                         />

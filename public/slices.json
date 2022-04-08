@@ -66,9 +66,11 @@
                 "url": "vector-layer.geojson",
                 "iconSrc": "icons/yellow-circle.png",
                 "iconSize": 1000,
-                "iconScale": 0.05,
+                "iconScale": 0.04,
                 "name": "Векотрный слой картиночный",
-                "displayIcon": "icons/yellow-circle.png"
+                "displayIcon": "icons/yellow-circle.png",
+                "cluster": true,
+                "distance": 50
             }
         ]
     },

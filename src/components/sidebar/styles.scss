@@ -9,6 +9,7 @@
 
 .headerText {
     font-weight: bold;
+    text-transform: uppercase;
 }
 
 .body {
@@ -35,5 +36,22 @@
 
     .contentStyle {
         color: rgba(0, 0, 0, 0.4);
+    }
+
+}
+
+.clsuterBody {
+    .clusterBlock {
+        padding: 21px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        text-transform: capitalize;
+        text-align: left;
+    }
+
+    .clusterTitle {
+        font-weight: bold;
     }
 }
