@@ -67,7 +67,7 @@ export const MobileLegend = (props: MobileLegendProps) => {
             <FormGroup>
                 {
                     layerGroup.getLayersArray().map((layer, i) => {
-                        if (layer.get('name')) {
+                        if (layer.get('name') && layer.get('displayIcon')) {
                             return (
                                 <FormControlLabel
                                     key={i.toString()}
