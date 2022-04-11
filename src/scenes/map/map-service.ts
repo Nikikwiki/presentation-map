@@ -73,83 +73,44 @@ class MapService {
         let groups: LayerGroup[] = [];
 
         for (let slice of slices) {
-            const vectorTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'vector');
+            const layers: LayerWithUrl[] = [];
 
-            const tileTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'tile');
-
-            const gridTypedLayers = slice.layers.filter((layer: Layer) => layer.type === 'grid');
-
-            const featureConfig: LayerWithUrl[] = [];
-
-            for (let layer of vectorTypedLayers) {
+            for (let layer of slice.layers) {
                 // eslint-disable-next-line no-await-in-loop
                 const { data: layerByUrl } = await this.getLayer(layer.url);
-
-                featureConfig.push({ ...layer, layerByUrl });
+                layers.push({ ...layer, layerByUrl });
             }
 
-            const vectorLayers = [];
-
+            let mapLayers = [];
             const styleCache: any = {};
-            for (let layer of featureConfig) {
-                // const styles = this.getFeatureStyles(layer);
-                const source = this.getFeatureSource(layer);
-                const vectorLayer = new VectorLayer({
-                    source: source,
-                    style: (feature) => {
-                        const size = feature.get('features')?.length;
-                        let styles = styleCache[size];
-                        if (!styles) {
-                            styles = this.getFeatureStyles(layer, size);
-                        }
-                        return styles;
+            for (let layer of layers) {
+                let sharedLayer = null;
+
+                switch (layer.type) {
+                    case 'vector':
+                        sharedLayer = this.createVectorLayer(layer, styleCache);
+                        break;
+                    case 'tile':
+                        sharedLayer = this.createTileLayer(layer);
+                        break;
+                    case 'grid':
+                        sharedLayer = this.createGridLayer(layer);
+                        break;
+                    default: {
+                        sharedLayer = this.createVectorLayer(layer, styleCache);
                     }
-                });
-                vectorLayer.set('name', layer.name);
-                vectorLayer.set('displayIcon', layer.displayIcon);
-                vectorLayer.set('sharedId', layer.sharedId);
-                vectorLayers.push(vectorLayer);
-            }
+                }
 
-            const tileLayers = [];
+                sharedLayer.set('url', layer.url);
+                sharedLayer.set('displayIcon', layer.displayIcon);
+                sharedLayer.set('sharedId', layer.sharedId);
+                sharedLayer.set('name', layer.name);
 
-            for (let layer of tileTypedLayers) {
-                const tileLayer = new TileLayer({
-                    source: new XYZ({
-                        url: layer.url
-                    })
-                });
-                tileLayer.set('name', layer.name);
-                tileLayer.set('displayIcon', layer.displayIcon);
-                tileLayer.set('sharedId', layer.sharedId);
-                tileLayers.push(tileLayer);
-            }
-
-            const gridLayers = [];
-
-            for (let layer of gridTypedLayers) {
-                const utfGrid = new UTFGrid({
-                    tileJSON: {
-                        tiles: [ layer.url ],
-                        grids: [ layer.url ]
-                    }
-                });
-                utfGrid.set('url', layer.url);
-                utfGrid.set('displayIcon', layer.displayIcon);
-                utfGrid.set('sharedId', layer.sharedId);
-                utfGrid.set('name', layer.name);
-                const a = new TileLayer({
-                    source: utfGrid
-                });
-                gridLayers.push(a);
+                mapLayers.push(sharedLayer);
             }
 
             const group = new LayerGroup({
-                layers: [
-                    ...tileLayers,
-                    ...gridLayers,
-                    ...vectorLayers
-                ],
+                layers: mapLayers,
                 visible: false
             });
 
@@ -157,6 +118,44 @@ class MapService {
         }
 
         return groups;
+    }
+
+    private createVectorLayer(layer: LayerWithUrl, styleCache: any) {
+        const source = this.getFeatureSource(layer);
+        const vectorLayer = new VectorLayer({
+            source: source,
+            style: (feature) => {
+                const size = feature.get('features')?.length;
+                let styles = styleCache[size];
+                if (!styles) {
+                    styles = this.getFeatureStyles(layer, size);
+                }
+                return styles;
+            }
+        });
+
+        return vectorLayer;
+    }
+
+    private createTileLayer(layer: LayerWithUrl) {
+        const tileLayer = new TileLayer({
+            source: new XYZ({
+                url: layer.url
+            })
+        });
+        return tileLayer;
+    }
+
+    private createGridLayer(layer: LayerWithUrl) {
+        const utfGrid = new UTFGrid({
+            tileJSON: {
+                tiles: [ layer.url ],
+                grids: [ layer.url ]
+            }
+        });
+        return new TileLayer({
+            source: utfGrid
+        });
     }
 
     private getFeatureStyles(layer: LayerWithUrl, size: any) {
@@ -253,8 +252,8 @@ class MapService {
                     } else {
                         const utfGrid = new UTFGrid({
                             tileJSON: {
-                                tiles: [ layer.getSource().get('url') ],
-                                grids: [ layer.getSource().get('url') ]
+                                tiles: [ layer.get('url') ],
+                                grids: [ layer.get('url') ]
                             }
                         });
                         utfGrid.set('url', layer.getSource().get('url'));

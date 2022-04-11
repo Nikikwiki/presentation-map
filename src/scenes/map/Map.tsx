@@ -61,26 +61,19 @@ export const MapComponent = (props: MapComponentProps) => {
                         if (data !== null && data !== '') {
                             setClickedObject((prev: any) => ({
                                 ...prev,
-                                layer: layer.getSource(),
+                                layer: layer,
                                 featureProps: data,
                                 cluster: []
                             }));
                         } else {
                             setClickedObject((prev: any) => ({
                                 ...prev,
-                                layer: layer.getSource(),
+                                layer: layer,
                                 featureProps: null,
                                 cluster: []
                             }));
                         }
                     });
-            } else {
-                setClickedObject((prev: any) => ({
-                    ...prev,
-                    layer: layer.getSource(),
-                    featureProps: null,
-                    cluster: []
-                }));
             }
         });
     };
