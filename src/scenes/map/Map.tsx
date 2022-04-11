@@ -175,7 +175,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const handleLeftLayerChange = (value: number) => {
         layerGroups.forEach(group => group.setVisible(false));
         if (!showLayerDiff) {
-            layerGroups[value].setVisible(true);
+            layerGroups[value]?.setVisible(true);
         } else {
             swipeControl.current.removeLayers(swipeControl.current.layers.map((swl: any) => swl.layer));
             layerGroups[value].getLayersArray()
