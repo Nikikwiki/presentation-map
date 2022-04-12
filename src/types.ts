@@ -10,8 +10,9 @@ export interface MapConfig {
 export interface Slice {
     id: number,
     date: string,
-    type: string,
-    layers: Layer[]
+    layers: Layer[],
+    sliderText: string, // название среза на слайдере
+    sliderLabel: string // лейбл среза при переключении слайдера
 }
 
 export interface Layer {

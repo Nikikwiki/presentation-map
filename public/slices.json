@@ -2,6 +2,8 @@
     {
         "id": 1,
         "date": "2022-01-01 00:00:00",
+        "sliderText": "2022",
+        "sliderLabel": "1.01.2022",
         "layers": [
             {
                 "type": "vector",
@@ -19,6 +21,8 @@
     {
         "id": 2,
         "date": "2020-02-01 00:00:00",
+        "sliderText": "2020",
+        "sliderLabel": "1.02.2020",
         "layers": [
             {
                 "type": "vector",
@@ -34,6 +38,8 @@
     {
         "id": 3,
         "date": "2023-01-01 00:00:00",
+        "sliderText": "2023",
+        "sliderLabel": "1.01.2023",
         "layers": [
             {
                 "type": "tile",
@@ -56,6 +62,8 @@
     {
         "id": 4,
         "date": "2022-01-01 00:00:00",
+        "sliderText": "2022",
+        "sliderLabel": "1.01.2022",
         "layers": [
             {
                 "type": "vector",
@@ -78,6 +86,8 @@
     {
         "id": 5,
         "date": "2025-01-01 00:00:00",
+        "sliderText": "2025",
+        "sliderLabel": "1.01.2025",
         "layers": [
             {
                 "type": "tile",
@@ -111,6 +121,8 @@
     {
         "id": 6,
         "date": "2026-01-01 00:00:00",
+        "sliderText": "2026",
+        "sliderLabel": "1.01.2026",
         "layers": [
             {
                 "type": "tile",

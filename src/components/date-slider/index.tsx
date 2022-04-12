@@ -15,8 +15,7 @@ export const DateSlider = (props: DateSliderProps) => {
     const [ layerDate, setLayerDate ] = useState(0);
 
     const marks = slices.map((slice, i) => {
-        return { label: moment(slice.date).format('YYYY'),
-            value: i };
+        return { label: slice.sliderText, value: i };
     });
 
     const handleChange = (value: number) => {
@@ -31,7 +30,7 @@ export const DateSlider = (props: DateSliderProps) => {
 
     const lableChange = (value: number) => {
         const slice = slices.find((_, i) => i === value);
-        return slice ? `${moment(slice.date).format('DD.MM.YYYY')}` : '';
+        return slice ? slice.sliderLabel : '';
     };
 
     const selectClosestMark = (e: React.MouseEvent<HTMLElement>) => {
