@@ -87,12 +87,14 @@
                 "type": "tile",
                 "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru",
                 "name": "Тайловый слой",
-                "displayIcon": "icons/runner.png"
+                "displayIcon": "icons/runner.png",
+                "sharedId": "2"
             },
             {
                 "type": "grid",
                 "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru",
-                "name": "Тайловый слой"
+                "name": "Тайловый слой",
+                "sharedId": "2"
             },
             {
                 "type": "vector",

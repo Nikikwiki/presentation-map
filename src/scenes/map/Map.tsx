@@ -55,7 +55,7 @@ export const MapComponent = (props: MapComponentProps) => {
         const coordinate = map.getEventCoordinate(e.originalEvent);
         const resolution = map.getView().getResolution();
         layerGroup.getLayersArray().forEach(layer => {
-            if (layer.getSource() instanceof UTFGrid) {
+            if (layer.getVisible() && layer.getSource() instanceof UTFGrid) {
                 layer.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
                     (data: any) => {
                         if (data !== null && data !== '') {
@@ -82,7 +82,7 @@ export const MapComponent = (props: MapComponentProps) => {
         const coordinate = map.getEventCoordinate(e.originalEvent);
         const resolution = map.getView().getResolution();
         layerGroup.getLayersArray().forEach(layer => {
-            if (layer.getSource() instanceof UTFGrid) {
+            if (layer.getVisible() && layer.getSource() instanceof UTFGrid) {
                 layer.getSource().forDataAtCoordinateAndResolution(coordinate, resolution,
                     (data: any) => {
                         map.getTargetElement().style.cursor = data ? 'pointer' : '';
@@ -175,7 +175,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const handleLeftLayerChange = (value: number) => {
         layerGroups.forEach(group => group.setVisible(false));
         if (!showLayerDiff) {
-            layerGroups[value]?.setVisible(true);
+            layerGroups[value].setVisible(true);
         } else {
             swipeControl.current.removeLayers(swipeControl.current.layers.map((swl: any) => swl.layer));
             layerGroups[value].getLayersArray()
