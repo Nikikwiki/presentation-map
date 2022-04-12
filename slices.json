@@ -2,6 +2,8 @@
     {
         "id": 1,
         "date": "2022-01-01 00:00:00",
+        "sliderText": "2022",
+        "sliderLabel": "1.01.2022",
         "layers": [
             {
                 "type": "vector",
@@ -9,19 +11,18 @@
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
+                "strokeWidth": 3,
                 "name": "Векторный слой нарисованный",
                 "displayIcon": "icons/blueIcon.png",
                 "sharedId": "1"
-            },
-            {
-                "type": "tile",
-                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
     },
     {
         "id": 2,
         "date": "2020-02-01 00:00:00",
+        "sliderText": "2020",
+        "sliderLabel": "1.02.2020",
         "layers": [
             {
                 "type": "vector",
@@ -37,52 +38,57 @@
     {
         "id": 3,
         "date": "2023-01-01 00:00:00",
+        "sliderText": "2023",
+        "sliderLabel": "1.01.2023",
         "layers": [
+            {
+                "type": "tile",
+                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+            },
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
                 "width": 7,
                 "fillColor": [ 255, 160, 0, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
+                "strokeWidth": 3.5,
                 "cluster": true,
                 "distance": 25,
                 "name": "Векотрный слой с кластером",
                 "displayIcon": "icons/orangeIcon.png"
-            },
-            {
-                "type": "tile",
-                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
     },
     {
         "id": 4,
         "date": "2022-01-01 00:00:00",
+        "sliderText": "2022",
+        "sliderLabel": "1.01.2022",
         "layers": [
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
                 "iconSrc": "icons/yellow-circle.png",
                 "iconSize": 1000,
-                "iconScale": 0.05,
+                "iconScale": 0.04,
                 "name": "Векотрный слой картиночный",
-                "displayIcon": "icons/yellow-circle.png"
+                "displayIcon": "icons/yellow-circle.png",
+                "cluster": true,
+                "distance": 50,
+                "text": true,
+                "fillText": "#000",
+                "offsetXText": 10,
+                "offsetYText": 10,
+                "scaleText": 1.2
             }
         ]
     },
     {
         "id": 5,
         "date": "2025-01-01 00:00:00",
+        "sliderText": "2025",
+        "sliderLabel": "1.01.2025",
         "layers": [
-            {
-                "type": "vector",
-                "url": "vector-layer.geojson",
-                "width": 6,
-                "fillColor": [ 38, 166, 154, 1 ],
-                "strokeColor": [ 255, 249, 196, 1 ],
-                "name": "Векотрный слой рисованный",
-                "displayIcon": "icons/greenIcon.png"
-            },
             {
                 "type": "tile",
                 "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
@@ -91,31 +97,47 @@
                 "type": "tile",
                 "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru",
                 "name": "Тайловый слой",
-                "displayIcon": "icons/runner.png"
+                "displayIcon": "icons/runner.png",
+                "sharedId": "2"
             },
             {
                 "type": "grid",
-                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru"
+                "url": "https://admin.geoportal40.ru/tms/geoportal40/playgroundmap/?layers=4497&x={x}&y={-y}&z={z}&lng=ru&grid=1&grid_fields=street_ru",
+                "name": "Тайловый слой",
+                "sharedId": "2"
+            },
+            {
+                "type": "vector",
+                "url": "vector-layer.geojson",
+                "width": 6,
+                "fillColor": [ 38, 166, 154, 1 ],
+                "strokeColor": [ 255, 249, 196, 1 ],
+                "strokeWidth": 3,
+                "name": "Векотрный слой рисованный",
+                "displayIcon": "icons/greenIcon.png"
             }
         ]
     },
     {
         "id": 6,
         "date": "2026-01-01 00:00:00",
+        "sliderText": "2026",
+        "sliderLabel": "1.01.2026",
         "layers": [
+            {
+                "type": "tile",
+                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
+            },
             {
                 "type": "vector",
                 "url": "vector-layer.geojson",
                 "width": 6,
                 "fillColor": [ 0, 153, 255, 1 ],
                 "strokeColor": [ 255, 255, 255, 1 ],
+                "strokeWidth": 3,
                 "name": "Векторный слой нарисованный",
                 "displayIcon": "icons/blueIcon.png",
                 "sharedId": "1"
-            },
-            {
-                "type": "tile",
-                "url": "https://maps.orbismap.ru/base.png?x={x}&y={-y}&z={z}"
             }
         ]
     }
