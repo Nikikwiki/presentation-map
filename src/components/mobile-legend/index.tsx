@@ -100,14 +100,19 @@ export const MobileLegend = (props: MobileLegendProps) => {
 
     return (
         <div className={styles.controlButton}>
-            <Button
-                variant="contained"
-                size='large'
-                className={styles.controlButton}
-                onClick={() => setShowLegend(true)}
-            >
-                Легенда
-            </Button>
+            {
+                layerGroup?.getLayersArray().find(layer => layer.get('name') && layer.get('displayIcon'))
+            && (
+                <Button
+                    variant="contained"
+                    size='large'
+                    className={styles.controlButton}
+                    onClick={() => setShowLegend(true)}
+                >
+                    Легенда
+                </Button>
+            )
+            }
             <Drawer
                 anchor='bottom'
                 open={showLegend}

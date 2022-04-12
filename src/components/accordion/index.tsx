@@ -74,19 +74,26 @@ export const AccordionComponent = (
     };
 
     return (
-        <Accordion className={styles.accordion}>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-            >
-                <Typography>Легенда</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <Typography component="span">
-                    { layerGroup ? renderContent() : null }
-                </Typography>
-            </AccordionDetails>
-        </Accordion>
+        <div>
+            {
+                layerGroup?.getLayersArray().find(layer => layer.get('name') && layer.get('displayIcon'))
+                && (
+                    <Accordion className={styles.accordion}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Легенда</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography component="span">
+                                { layerGroup ? renderContent() : null }
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                )
+            }
+        </div>
     );
 };
