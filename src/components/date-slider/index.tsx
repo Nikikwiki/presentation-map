@@ -80,7 +80,7 @@ export const DateSlider = (props: DateSliderProps) => {
                 max={slices.length - 1}
                 onChange={(e, value) => handleOnChange(e, value)}
                 valueLabelFormat={lableChange}
-                valueLabelDisplay="auto"
+                valueLabelDisplay={slices.find(slice => slice.sliderLabel) ? 'auto' : 'off'}
             />
         </div>
     );
