@@ -16,7 +16,7 @@ export interface Slice {
 }
 
 export interface Layer {
-    type: string, // тип слоя
+    type: 'vector' | 'tile' | 'grid' | 'legend', // тип слоя
     url: string, // сслыка на слой
     width: number, // [optional] размер рисованой картинки
     fillColor: number[], // [optional] цвет заполнения
@@ -27,8 +27,8 @@ export interface Layer {
     iconScale: number, // [optional] масштаб картинки
     cluster: boolean, // [optional] кластеризовать слой
     distance: number, // [optional] дальность кластеризации
-    name: string, // [optional] название слоя в легенде
-    displayIcon: string, // [optional] ссылка на картинку для отображения в легенде
+    name: string, // [optional] название слоя в легенде (обязателен для отображения в легенды)
+    displayIcon: string, // [optional] ссылка на картинку для отображения в легенде (обязателен для отображения в легенды)
     sharedId: string // [optional] общий ID слоев для скрытия
     text: boolean // [optional] подпись к кластеру
     fillText: string, // [optional] цвет текста подписи

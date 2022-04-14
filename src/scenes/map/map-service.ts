@@ -76,9 +76,14 @@ class MapService {
             const layers: LayerWithUrl[] = [];
 
             for (let layer of slice.layers) {
-                // eslint-disable-next-line no-await-in-loop
-                const { data: layerByUrl } = await this.getLayer(layer.url);
-                layers.push({ ...layer, layerByUrl });
+                if (layer.url) {
+                    // eslint-disable-next-line no-await-in-loop
+                    const { data: layerByUrl } = await this.getLayer(layer.url);
+                    layers.push({ ...layer, layerByUrl });
+                } else {
+                    const layerByUrl = '';
+                    layers.push({ ...layer, layerByUrl });
+                }
             }
 
             let mapLayers = [];
@@ -96,8 +101,11 @@ class MapService {
                     case 'grid':
                         sharedLayer = this.createGridLayer(layer);
                         break;
+                    case 'legend':
+                        sharedLayer = this.createEmptyLayer();
+                        break;
                     default: {
-                        sharedLayer = this.createVectorLayer(layer, styleCache);
+                        sharedLayer = this.createEmptyLayer();
                     }
                 }
 
@@ -141,6 +149,15 @@ class MapService {
         const tileLayer = new TileLayer({
             source: new XYZ({
                 url: layer.url
+            })
+        });
+        return tileLayer;
+    }
+
+    private createEmptyLayer() {
+        const tileLayer = new TileLayer({
+            source: new XYZ({
+                url: undefined
             })
         });
         return tileLayer;
@@ -246,7 +263,7 @@ class MapService {
                     if (layer.getSource() instanceof XYZ) {
                         l = new TileLayer({
                             source: new XYZ({
-                                url: layer.getSource().getUrls()[0]
+                                url: layer.getSource().getUrls() ? layer.getSource().getUrls()[0] : ''
                             })
                         });
                     } else {
