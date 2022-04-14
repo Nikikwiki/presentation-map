@@ -87,7 +87,7 @@ export const AccordionComponent = (
                             <Typography>Легенда</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography component="span">
+                            <Typography component="span" className={styles.legendName}>
                                 { layerGroup ? renderContent() : null }
                             </Typography>
                         </AccordionDetails>

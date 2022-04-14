@@ -84,7 +84,7 @@ export const MobileLegend = (props: MobileLegendProps) => {
                                                 style={{ backgroundImage: `url(${layer.get('displayIcon')})` }}
                                             >
                                             </div>
-                                            <span>
+                                            <span className={styles.lableName}>
                                                 {layer.get('name')}
                                             </span>
                                         </div>
