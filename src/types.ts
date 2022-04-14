@@ -18,23 +18,23 @@ export interface Slice {
 export interface Layer {
     type: string, // тип слоя
     url: string, // сслыка на слой
-    width: number, // размер рисованой картинки
-    fillColor: number[], // цвет заполнения
-    strokeColor: number[], // цвет обводки
-    strokeWidth: number, // толщина обводкии
+    width: number, // [optional] размер рисованой картинки
+    fillColor: number[], // [optional] цвет заполнения
+    strokeColor: number[], // [optional] цвет обводки
+    strokeWidth: number, // [optional] толщина обводкии
     iconSrc: string, // ссылка на картинку для отображения на карте
-    iconSize: number, // размер картинки
-    iconScale: number, // масштаб картинки
-    cluster: boolean, // кластеризовать слой
-    distance: number, // дальность кластеризации
-    name: string, // название слоя в легенде
-    displayIcon: string, // ссылка на картинку для отображения в легенде
-    sharedId: string // общий ID слоев для скрытия
-    text: boolean // подпись к кластеру
-    fillText: string, // цвет текста подписи
-    offsetXText: number // смещение текста относительно иконки по Х
-    offsetYText: number // смещение текста относительно иконки по Y
-    scaleText: number // размер текста
+    iconSize: number, // [optional] размер картинки
+    iconScale: number, // [optional] масштаб картинки
+    cluster: boolean, // [optional] кластеризовать слой
+    distance: number, // [optional] дальность кластеризации
+    name: string, // [optional] название слоя в легенде
+    displayIcon: string, // [optional] ссылка на картинку для отображения в легенде
+    sharedId: string // [optional] общий ID слоев для скрытия
+    text: boolean // [optional] подпись к кластеру
+    fillText: string, // [optional] цвет текста подписи
+    offsetXText: number // [optional] смещение текста относительно иконки по Х
+    offsetYText: number // [optional] смещение текста относительно иконки по Y
+    scaleText: number // [optional] размер текста
 }
 
 export interface LayerWithUrl extends Layer {

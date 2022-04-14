@@ -166,8 +166,8 @@ class MapService {
             styles = new Style({
                 image: new Icon({
                     src: layer.iconSrc,
-                    size: [ layer.iconSize, layer.iconSize ],
-                    scale: layer.iconScale
+                    size: layer.iconSize ? [ layer.iconSize, layer.iconSize ] : undefined,
+                    scale: layer.iconScale ? layer.iconScale : 1
                 }),
                 text: new Text({
                     text: size?.toString(),
@@ -216,10 +216,10 @@ class MapService {
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({
                 color: strokeColor,
-                width: width
+                width: width || 7
             }),
             image: new Circle({
-                radius: width * 2,
+                radius: (width || 7) * 2,
                 fill: new Fill({ color: fillColor }),
                 stroke: new Stroke({
                     color: strokeColor,
