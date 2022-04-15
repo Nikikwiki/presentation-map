@@ -20,6 +20,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import clsx from 'clsx';
 import { mapService } from './map-service';
 import styles from './styles.scss';
 
@@ -39,7 +40,7 @@ export const MapComponent = (props: MapComponentProps) => {
     const [ sliderLayerNumber, setSliderLayerNumber ] = useState<number>(0);
     const [ showLayerDiff, setShowLayerDiff ] = useState<boolean>(false);
 
-    const mediaMatches = useMediaQuery('(min-width: 650px)');
+    const mediaMatches = useMediaQuery('(min-width: 666px)');
 
     const swipeControl = useRef(new Swipe());
 
@@ -229,10 +230,15 @@ export const MapComponent = (props: MapComponentProps) => {
         }));
     };
 
+    const controlsStyle = clsx({
+        [styles.controls]: !showLayerDiff,
+        [styles.compareGrid]: showLayerDiff
+    });
+
     return (
         <div className={styles.mapWrapper}>
             <div className={styles.map} ref={mapRef}></div>
-            <div className={styles.controls}>
+            <div className={controlsStyle}>
                 <div className={styles.topControls}>
                     {
                         (mapConfig.hasCompare && slices.length > 1) && (
@@ -249,85 +255,85 @@ export const MapComponent = (props: MapComponentProps) => {
                         )
                     }
                 </div>
-                <div className={styles.midControls}>
-                    <div className={styles.zoomControls}>
-                        <Button
-                            type='button'
-                            title='Zoom in'
-                            variant='contained'
-                            size='large'
-                            className='controlButton'
-                            onClick={() => {
-                                const zoom = map.getView().getZoom();
-                                if (zoom !== undefined) {
-                                    map.getView().animate({
-                                        zoom: zoom + 1,
-                                        duration: 250
-                                    });
-                                }
-                            }}
-                        >
-                            <AddIcon />
-                        </Button>
-                        <Button
-                            type="button"
-                            title='Zoom out'
-                            className='controlButton'
-                            size='large'
-                            variant='contained'
-                            onClick={() => {
-                                const zoom = map.getView().getZoom();
-                                if (zoom !== undefined) {
-                                    map.getView().animate({
-                                        zoom: zoom - 1,
-                                        duration: 250
-                                    });
-                                }
-                            }}
-                        >
-                            <RemoveIcon />
-                        </Button>
-                    </div>
-                </div>
-                <div className={styles.bottomControls}>
-                    <div className={styles.accodrionWrapper}>
-                        <div className={styles.accordionLeft}>
-                            {
-                                mediaMatches
-                                    ? (
-                                        <AccordionComponent
-                                            layerGroup={layerGroups[sliderLayerNumber]}
-                                            sideGroups={layerGroups}
-                                        />
-                                    )
-                                    : (
-                                        <MobileLegend
-                                            layerGroup={layerGroups[sliderLayerNumber]}
-                                            sideGroups={layerGroups}
-                                        />
-                                    )
+                <div className={styles.zoomControls}>
+                    <Button
+                        type='button'
+                        title='Zoom in'
+                        variant='contained'
+                        size='large'
+                        className='controlButton'
+                        onClick={() => {
+                            const zoom = map.getView().getZoom();
+                            if (zoom !== undefined) {
+                                map.getView().animate({
+                                    zoom: zoom + 1,
+                                    duration: 250
+                                });
                             }
-                        </div>
+                        }}
+                    >
+                        <AddIcon />
+                    </Button>
+                    <Button
+                        type="button"
+                        title='Zoom out'
+                        className='controlButton'
+                        size='large'
+                        variant='contained'
+                        onClick={() => {
+                            const zoom = map.getView().getZoom();
+                            if (zoom !== undefined) {
+                                map.getView().animate({
+                                    zoom: zoom - 1,
+                                    duration: 250
+                                });
+                            }
+                        }}
+                    >
+                        <RemoveIcon />
+                    </Button>
+                </div>
+                <div className={styles.accodrionWrapper}>
+                    <div className={styles.accordionLeft}>
+                        {
+                            mediaMatches
+                                ? (
+                                    <AccordionComponent
+                                        layerGroup={layerGroups[sliderLayerNumber]}
+                                        sideGroups={layerGroups}
+                                    />
+                                )
+                                : (
+                                    <MobileLegend
+                                        layerGroup={layerGroups[sliderLayerNumber]}
+                                        sideGroups={layerGroups}
+                                    />
+                                )
+                        }
+                    </div>
+                    {
+                        showLayerDiff
+                    && (
                         <div className={styles.accordionRight}>
                             {
-                                showLayerDiff && (
-                                    mediaMatches ? (
-                                        <AccordionComponent
-                                            layerGroup={copyLayerGroups[swipeLayerNumber]}
-                                            sideGroups={copyLayerGroups}
-                                        />
-                                    ) : (
-                                        <MobileLegend
-                                            layerGroup={copyLayerGroups[swipeLayerNumber]}
-                                            sideGroups={copyLayerGroups}
-                                        />
-                                    )
+                                mediaMatches ? (
+                                    <AccordionComponent
+                                        layerGroup={copyLayerGroups[swipeLayerNumber]}
+                                        sideGroups={copyLayerGroups}
+                                    />
+                                ) : (
+                                    <MobileLegend
+                                        layerGroup={copyLayerGroups[swipeLayerNumber]}
+                                        sideGroups={copyLayerGroups}
+                                    />
                                 )
                             }
                         </div>
-                    </div>
-                    {
-                        slices.length > 1
+                    )
+                    }
+                </div>
+                {
+                    slices.length > 1
                             && (
                                 <div className={styles.sliderWrapper}>
                                     <DateSlider
@@ -344,8 +350,7 @@ export const MapComponent = (props: MapComponentProps) => {
                                     }
                                 </div>
                             )
-                    }
-                </div>
+                }
             </div>
             {
                 mediaMatches
@@ -374,7 +379,6 @@ export const MapComponent = (props: MapComponentProps) => {
                             }}
                         />
                     )
-
             }
         </div>
     );

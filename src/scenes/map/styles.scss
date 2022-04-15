@@ -1,7 +1,7 @@
 .map-wrapper {
     height: 100%;
     width: 100%;
-    position: relative;  
+    position: relative;
 }
 
 .map {
@@ -16,27 +16,89 @@
     height: 100%;
     pointer-events: none;
     text-align: center;
-    display: flex;
-    flex-direction: column;
+    
+    display: grid;
+    grid-template-rows: 4fr 4fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 8px;
+    grid-template-areas: 
+    '. . topControls'
+    '. . zoomControls'
+    'accordion slider .';
 }
 
-.midControls {
-    display: flex;
-    flex-direction: column;
-    margin-right: 8px;
+.compareGrid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    text-align: center;
+    
+    gap: 8px;
+    display: grid;
+    grid-template-rows: 4fr 4fr 1fr 80px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+    'topControls topControls'
+    'zoomControls zoomControls'
+    'accordion accordion'
+    'slider slider';
 
-    .rightControlsContent {
-        flex-grow: 1;
+    .accodrionWrapper {
+        margin: 0px !important;
+    }
+
+    .sliderWrapper {
+        justify-content: space-between;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .controls {
+        grid-template-areas: 
+        'topControls topControls'
+        'zoomControls zoomControls'
+        'accordion accordion'
+        'slider slider';
+        grid-template-rows: 4fr 4fr 1fr 80px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .accodrionWrapper {
+        margin: 0px !important;
+    }
+}
+
+@media screen and (max-width: 1930px) and (min-width: 1000px) {
+    .controls {
+        grid-template-areas: 
+        '. . topControls'
+        '. . zoomControls'
+        'accordion slider slider';
+        grid-template-rows: 4fr 4fr 1fr;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .sliderWrapper {
+        grid-column-start: 2;
+        grid-column-end: 4;
+        justify-content: flex-start !important;
+    }
+
+    .accodrionWrapper {
+        margin-bottom: 8px !important;
     }
 }
 
 .zoomControls {
+    grid-area: zoomControls;
     display: flex;
     align-items: flex-end;
-    justify-content: flex-end;
+    justify-content: center;
 
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
+    margin-right: 8px;
 
     button {
         min-width: 45px !important;
@@ -45,33 +107,21 @@
     }
 }
 
-.bottomControls {
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 8px;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 8px;
-
-
-    &.slider {
-        pointer-events: all;
-    }
-}
-
 .topControls {
+    grid-area: topControls;
     margin-top: 8px;
     margin-right: 8px;
     text-align: right;
     flex-grow: 1;
 
-        .diffControlsButton {
+    .diffControlsButton {
         padding: 8px;
     }
 }
 
 .accodrionWrapper {
+    grid-area: accordion;
+    margin-bottom: 8px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -92,10 +142,11 @@
 }
 
 .sliderWrapper {
+    grid-area: slider;
+    margin-bottom: 8px;
     display: flex;
-    justify-content: space-around;
-    width: 100%;
-    gap: 16px;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 .sliderSpan {
@@ -132,7 +183,9 @@
     }
 }
 
-.ol-swipe button:before, .ol-swipe button:after, .ol-swipe:after {
+.ol-swipe button:before,
+.ol-swipe button:after,
+.ol-swipe:after {
     content: "";
     position: absolute;
     width: 1px;

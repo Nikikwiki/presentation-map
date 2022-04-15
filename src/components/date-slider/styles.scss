@@ -9,7 +9,7 @@
 
 .wrapperSlider {
     width: 100%;
-    max-width: 54%;
+    max-width: 900px;
     padding: 14px 24px 0px;
     border-radius: 7px;
     background-color: #fff;
@@ -20,7 +20,7 @@
     margin-right: 8px;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 666px) {
     .wrapperSlider {
         max-width: 100%;
         margin-left: 8px;
