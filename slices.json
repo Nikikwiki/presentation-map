@@ -15,6 +15,16 @@
                 "name": "Векторный слой нарисованный",
                 "displayIcon": "icons/blueIcon.png",
                 "sharedId": "1"
+            },
+            {
+                "type": "legend",
+                "name": "Просто легенда",
+                "displayIcon": "icons/orangeIcon.png"
+            },
+            {
+                "type": "legend",
+                "name": "Просто другая легенда",
+                "displayIcon": "icons/circle.png"
             }
         ]
     },
