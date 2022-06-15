@@ -233,7 +233,7 @@ class MapService {
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({
                 color: strokeColor,
-                width: width || 7
+                width: strokeWidth || 7
             }),
             image: new Circle({
                 radius: (width || 7) * 2,
