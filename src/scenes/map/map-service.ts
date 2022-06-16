@@ -14,6 +14,7 @@ import * as olControl from 'ol/control';
 import { MouseWheelZoom, defaults } from 'ol/interaction';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import XYZ from 'ol/source/XYZ';
+import { fromLonLat } from 'ol/proj';
 
 class MapService {
     public async generateMap(mapConfig: MapConfig, slices: Slice[], mapRef:any): Promise<{
@@ -21,6 +22,18 @@ class MapService {
         groups: LayerGroup[]
         groupsCopy: LayerGroup[],
     }> {
+        let transformedCenter = [ 0, 0 ];
+        let transformedExtnet;
+        if (mapConfig.center) {
+            transformedCenter = fromLonLat([ mapConfig.center[1], mapConfig.center[0] ], 'EPSG:3857');
+        }
+        if (mapConfig.extent) {
+            transformedExtnet = [];
+            const left = fromLonLat([ mapConfig.extent[1], mapConfig.extent[0] ], 'EPSG:3857');
+            transformedExtnet.push(...left);
+            const right = fromLonLat([ mapConfig.extent[3], mapConfig.extent[2] ], 'EPSG:3857');
+            transformedExtnet.push(...right);
+        }
         const map = new OlMap({
             target: mapRef.current,
             layers: [
@@ -29,11 +42,11 @@ class MapService {
                 })
             ],
             view: new View({
-                center: mapConfig.center,
+                center: transformedCenter || undefined,
                 zoom: mapConfig.zoom,
                 minZoom: mapConfig.minZoom,
                 maxZoom: mapConfig.maxZoom,
-                extent: mapConfig.extent,
+                extent: transformedExtnet || undefined,
                 projection: 'EPSG:3857'
             }),
             controls: olControl.defaults({
